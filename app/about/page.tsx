@@ -4,6 +4,7 @@ import { Target, Lightbulb } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import Cta from '@/components/shared/cta'
 import Image from 'next/image'
+import teamAvatar from '@/public/assets/team-avatar.jpeg'
 
 const teamMembers = [
    {
@@ -81,8 +82,10 @@ export default function page() {
                      <div key={index} className="text-center group">
                         <div className="mb-6 overflow-hidden rounded-full w-32 h-32 mx-auto bg-muted border-4 border-primary/10 hover:border-primary/30 transition-all">
                            <Image
-                              src={member.avatar || "/placeholder.svg"}
+                              src={teamAvatar}
                               alt={member.name}
+                              height={1000}
+                              width={1000}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                            />
                         </div>

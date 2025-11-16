@@ -15,7 +15,7 @@ export default function Header() {
    const isActive = (path: string) => pathname === path;
 
    return (
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
          <div className="container flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
                <GraduationCap className="h-6 w-6 text-primary" />
@@ -24,13 +24,13 @@ export default function Header() {
 
             <nav className="hidden md:flex items-center space-x-6">
                <Link href="/"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Home
                </Link>
                <Link href="/courses"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/courses') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/courses') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Courses
@@ -46,13 +46,13 @@ export default function Header() {
             </Link>
           )} */}
                <Link href="/about"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/about') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/about') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   About Us
                </Link>
                <Link href="/contact-us"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Contact

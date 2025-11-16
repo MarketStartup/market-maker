@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
+import courseImage from '@/public/assets/course_sample.jpeg';
 
 export default function WhyChooseUs() {
    return (
@@ -20,8 +21,10 @@ export default function WhyChooseUs() {
                <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-100/50 to-blue-50/50 rounded-2xl blur-2xl"></div>
                   <Image
-                     src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"
+                     src={courseImage}
                      alt="Team collaboration"
+                     height={1000}
+                     width={1000}
                      className="relative rounded-2xl shadow-lg w-full h-auto object-cover"
                   />
                </div>

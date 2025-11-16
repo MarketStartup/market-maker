@@ -106,8 +106,8 @@ function HeroContent({
 const HomeBanner = ({ content }: HeroProps) => {
 
    return (
-      <div className="container relative overflow-hidden">
-         <div className="flex flex-col lg:flex-row items-center py-24">
+      <div className="bg-white relative overflow-hidden">
+         <div className="container flex flex-col lg:flex-row items-center py-24">
             <div className="flex flex-col gap-4 w-full lg:max-w-2xl">
                {/* {pill && <HeroBadge {...pill} />} */}
                <HeroContent {...content} />

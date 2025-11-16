@@ -7,8 +7,8 @@ import { ArrowRight, ArrowRightLeft } from 'lucide-react'
 
 export default function Cta() {
    return (
-      <div className="container py-16 px-4 sm:px-6 md:px-20">
-         <div className="flex flex-col text-center bg-muted rounded-md p-14 gap-8 items-center">
+      <div className="bg-white py-16 px-4 sm:px-6 md:px-20">
+         <div className="container flex flex-col text-center bg-muted rounded-md p-14 gap-8 items-center">
             <div>
                <Badge className="px-4 py-2 bg-blue-100 text-blue-700">Get started</Badge>
             </div>
