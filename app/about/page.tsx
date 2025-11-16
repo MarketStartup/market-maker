@@ -3,6 +3,7 @@ import Banner from '@/components/shared/banner'
 import { Target, Lightbulb } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import Cta from '@/components/shared/cta'
+import Image from 'next/image'
 
 const teamMembers = [
    {
@@ -79,7 +80,7 @@ export default function page() {
                   {teamMembers.map((member, index) => (
                      <div key={index} className="text-center group">
                         <div className="mb-6 overflow-hidden rounded-full w-32 h-32 mx-auto bg-muted border-4 border-primary/10 hover:border-primary/30 transition-all">
-                           <img
+                           <Image
                               src={member.avatar || "/placeholder.svg"}
                               alt={member.name}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"

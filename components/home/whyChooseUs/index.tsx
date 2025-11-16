@@ -1,4 +1,5 @@
-import {CheckCircle2, ChevronDown } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function WhyChooseUs() {
    return (
@@ -18,7 +19,7 @@ export default function WhyChooseUs() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
                <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-100/50 to-blue-50/50 rounded-2xl blur-2xl"></div>
-                  <img
+                  <Image
                      src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"
                      alt="Team collaboration"
                      className="relative rounded-2xl shadow-lg w-full h-auto object-cover"

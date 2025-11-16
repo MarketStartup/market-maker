@@ -2,7 +2,7 @@ import Banner from '@/components/shared/banner'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Star, Users, Clock, Award } from 'lucide-react'
+import { Star, Users, Clock } from 'lucide-react'
 import courseImage from '@/public/assets/course_sample.jpeg';
 import Image from 'next/image'
 import { coursesData } from '@/lib/data/course-data'

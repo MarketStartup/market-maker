@@ -9,12 +9,10 @@ import {
    BreadcrumbPage
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { Star, Users, Play, BookOpen, Clock, CheckCircle, ChevronRight } from 'lucide-react';
+import { Star, Users, Play, BookOpen, Clock, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { coursesData } from '@/lib/data/course-data'
 import { notFound } from 'next/navigation';
-import courseImage from '@/public/assets/course_sample.jpeg';
-import Image from 'next/image';
 import { TestimonialCarousel } from '@/components/course/testimonial';
 
 type Props = {

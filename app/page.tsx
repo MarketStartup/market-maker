@@ -1,14 +1,9 @@
 
 import { HomeBanner } from "@/components/home/homeBanner";
-import { ArrowRight, ArrowRightLeft, PhoneCall, MoveRight } from 'lucide-react';
+import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import Faq from "@/components/shared/faq";
 import WhyChooseUs from "@/components/home/whyChooseUs";
 import Feature from "@/components/home/feature";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
 import Cta from "@/components/shared/cta";
 
 export default function Home() {

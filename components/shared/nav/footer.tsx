@@ -110,7 +110,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © 2025 Market Makers. All rights reserved.
+            © {currentYear} Market Makers. All rights reserved.
           </p>
           <nav className="flex gap-4 text-sm">
             <a href="#" className='hover:underline'>
