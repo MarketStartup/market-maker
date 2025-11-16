@@ -103,16 +103,16 @@ function HeroContent({
    );
 }
 
-const Hero = ({ content }: HeroProps) => {
+const HomeBanner = ({ content }: HeroProps) => {
 
    return (
       <div className="container relative overflow-hidden">
-         <div className="flex flex-col lg:flex-row items-center py-24 px-4 md:px-8 lg:px-12">
+         <div className="flex flex-col lg:flex-row items-center py-24">
             <div className="flex flex-col gap-4 w-full lg:max-w-2xl">
                {/* {pill && <HeroBadge {...pill} />} */}
                <HeroContent {...content} />
             </div>
-            <div className="w-full lg:max-w-xl lg:pl-16 mt-12 lg:mt-0">
+            <div className="w-full lg:pl-16 mt-12 lg:mt-0">
                <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -131,4 +131,4 @@ const Hero = ({ content }: HeroProps) => {
    );
 };
 
-export { Hero };
+export { HomeBanner };

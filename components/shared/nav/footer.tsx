@@ -6,14 +6,14 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="container py-16">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold text-white">LearnHub</span>
+              <span className="text-2xl font-bold text-white">Market Makers</span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
               Empowering learners worldwide with high-quality, affordable online education and expert instruction.
@@ -87,8 +87,8 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="text-gray-400">support@learnhub.com</p>
-                  <p className="text-gray-400">info@learnhub.com</p>
+                  <p className="text-gray-400">support@mm.com</p>
+                  <p className="text-gray-400">info@mm.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -108,32 +108,21 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
-        <div className="border-t border-gray-800 pt-8">
-          <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-400">
-            <div>
-              <p>© {currentYear} LearnHub. All rights reserved.</p>
-            </div>
-            <div className="flex gap-6 justify-center md:justify-start">
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Cookie Policy
-              </a>
-            </div>
-            <div className="flex gap-6 justify-end md:justify-start">
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Blog
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Careers
-              </a>
-            </div>
-          </div>
+        <div className="flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
+          <p className="text-sm text-muted-foreground">
+            © 2025 Market Makers. All rights reserved.
+          </p>
+          <nav className="flex gap-4 text-sm">
+            <a href="#" className='hover:underline'>
+              Privacy Policy
+            </a>
+            <a href="#" className='hover:underline'>
+              Terms of Service
+            </a>
+            {/* <a href="#" className='hover:underline'>
+              Cookie Settings
+            </a> */}
+          </nav>
         </div>
       </div>
     </footer>

@@ -19,7 +19,7 @@ export default function Header() {
          <div className="container flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
                <GraduationCap className="h-6 w-6 text-primary" />
-               <span className="text-xl font-bold text-primary">LearnHub</span>
+               <span className="text-xl font-bold text-primary">Market Makers</span>
             </Link>
 
             <nav className="hidden md:flex items-center space-x-6">
@@ -51,8 +51,8 @@ export default function Header() {
                >
                   About Us
                </Link>
-               <Link href="/contact"
-                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/contact') ? 'text-primary' : 'text-foreground/60'
+               <Link href="/contact-us"
+                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Contact
@@ -97,7 +97,7 @@ export default function Header() {
                      <SheetHeader>
                         <SheetTitle className="flex items-center space-x-2">
                            <GraduationCap className="h-6 w-6 text-primary" />
-                           <span>LearnHub</span>
+                           <span>Market Makers</span>
                         </SheetTitle>
                      </SheetHeader>
                      <nav className="flex flex-col space-y-4 mt-8">
@@ -133,9 +133,9 @@ export default function Header() {
                         >
                            About Us
                         </Link>
-                        <Link href="/contact"
+                        <Link href="/contact-us"
                            onClick={() => setOpen(false)}
-                           className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${isActive('/contact') ? 'text-primary bg-accent' : 'text-foreground'
+                           className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${isActive('/contact-us') ? 'text-primary bg-accent' : 'text-foreground'
                               }`}
                         >
                            Contact
