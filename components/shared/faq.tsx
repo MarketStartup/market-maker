@@ -6,6 +6,8 @@ import {
    AccordionTrigger,
    AccordionContent,
 } from "@/components/ui/accordion"
+import SectionBadge from "./sectionBadge"
+import SectionHeading from "./sectionHeading"
 
 const faqs = [
    {
@@ -46,19 +48,11 @@ export default function Faq() {
    return (
       <div className="bg-slate-50 py-24">
          <div className="container">
-
-            {/* Header */}
-            <div className="text-center mb-16">
-               <span className="inline-block px-4 py-2 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full mb-4">
-                  FAQ
-               </span>
-               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-                  Frequently Asked Questions
-               </h2>
-               <p className="text-xl text-slate-600">
-                  Everything you need to know about our platform and services
-               </p>
-            </div>
+            <SectionHeading
+               badge='FAQ'
+               title='Frequently Asked Questions'
+               description='Everything you need to know about our platform and services'
+            />
 
             {/* Accordion */}
             <Accordion type="single" collapsible className="space-y-4">
@@ -66,7 +60,11 @@ export default function Faq() {
                   <AccordionItem
                      key={index}
                      value={`faq-${index}`}
-                     className="bg-white border border-slate-200 rounded-lg overflow-hidden !border-b hover:border-blue-300 transition-colors"
+                     className="bg-white border border-slate-200 rounded-lg overflow-hidden transition-colors !border-b 
+                        hover:border-[var(--color-primary)] hover:shadow-lg 
+                        data-[state=open]:border-[var(--color-primary)]
+                        data-[state=open]:shadow-[var(--shadow-lg)]
+                        data-[state=open]:bg-[var(--color-accent)]/40"
                   >
                      <AccordionTrigger className="px-6 text-left text-base font-semibold text-slate-900 hover:no-underline cursor-pointer">
                         {faq.question}

@@ -1,19 +1,12 @@
 import React, { Fragment } from 'react'
 import { Badge } from '@/components/ui/badge';
-import {
-   Breadcrumb,
-   BreadcrumbItem,
-   BreadcrumbLink,
-   BreadcrumbSeparator,
-   BreadcrumbList,
-   BreadcrumbPage
-} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Star, Users, Play, BookOpen, Clock, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
 import { coursesData } from '@/lib/data/course-data'
 import { notFound } from 'next/navigation';
 import { TestimonialCarousel } from '@/components/course/testimonial';
+import { BreadcrumbType } from '@/models/breadcrumbType';
+import BreadcrumbWrap from '@/components/shared/breadcrumbWrap';
 
 type Props = {
    params: {
@@ -60,7 +53,7 @@ export default async function CourseDetail({ params }: Props) {
    const course = coursesData.find((c) => c.id === courseSlug)
    if (!course) return notFound()
 
-   const breadcrumbItems = [
+   const breadcrumbItems: BreadcrumbType[] = [
       { label: 'Home', href: '/' },
       { label: 'Courses', href: '/courses' },
       { label: course.category, href: `/courses?category=${course.category}` },
@@ -79,32 +72,12 @@ export default async function CourseDetail({ params }: Props) {
          <div className="text-white py-12 mb-12" style={heroStyle}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                {/* Breadcrumb */}
-               <div className="mb-8">
-                  <Breadcrumb>
-                     <BreadcrumbList>
-                        {breadcrumbItems.map((item, idx) => (
-                           <Fragment key={idx}>
-                              {item.href ?
-                                 <BreadcrumbItem>
-                                    <BreadcrumbLink asChild
-                                       className='text-white hover:text-white hover:underline'>
-                                       <Link href={item.href || ''}>{item.label}</Link>
-                                    </BreadcrumbLink>
-                                 </BreadcrumbItem> :
-                                 <BreadcrumbItem>
-                                    <BreadcrumbPage className='text-white'>
-                                       {item.label}
-                                    </BreadcrumbPage>
-                                 </BreadcrumbItem>
-                              }
-                              {(idx + 1) < breadcrumbItems.length &&
-                                 <BreadcrumbSeparator />
-                              }
-                           </Fragment>
-                        ))}
-                     </BreadcrumbList>
-                  </Breadcrumb>
-               </div>
+               {/* <div className="mb-8"> */}
+               <BreadcrumbWrap
+                  className='mb-8'
+                  items={breadcrumbItems}
+               />
+               {/* </div> */}
 
                <div className="grid md:grid-cols-3 gap-8 items-start">
                   <div className="md:col-span-2">
@@ -212,7 +185,7 @@ export default async function CourseDetail({ params }: Props) {
                <div className="md:col-span-2 space-y-12">
                   {/* Course Details Grid */}
                   <div className="grid grid-cols-2 gap-6 mb-12">
-                     <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors">
+                     <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/60 transition-colors">
                         <div className="flex items-center gap-3 mb-3">
                            <BookOpen className="w-6 h-6 text-primary" />
                            <span className="text-sm text-muted-foreground">SKILL LEVEL</span>
@@ -220,7 +193,7 @@ export default async function CourseDetail({ params }: Props) {
                         <p className="text-lg font-semibold text-foreground">{course.level}</p>
                      </div>
 
-                     <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors">
+                     <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/60 transition-colors">
                         <div className="flex items-center gap-3 mb-3">
                            <Clock className="w-6 h-6 text-primary" />
                            <span className="text-sm text-muted-foreground">DURATION</span>
@@ -232,7 +205,7 @@ export default async function CourseDetail({ params }: Props) {
                   {/* What You'll Learn */}
                   <div>
                      <h2 className="text-3xl font-bold text-foreground mb-8">What you'll learn</h2>
-                     <div className="grid md:grid-cols-2 gap-6 bg-card border border-border rounded-lg p-8 hover:border-primary/30 transition-colors">
+                     <div className="grid md:grid-cols-2 gap-6 bg-card border border-border rounded-lg p-6 hover:border-primary/60 transition-colors">
                         {[
                            'Master fundamental concepts and core principles',
                            'Build real-world projects from scratch',
@@ -256,7 +229,7 @@ export default async function CourseDetail({ params }: Props) {
                         {[1, 2, 3, 4, 5].map((week) => (
                            <details
                               key={week}
-                              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors"
+                              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/60 transition-colors"
                            >
                               <summary className="px-8 py-6 cursor-pointer hover:bg-muted transition-colors flex items-center justify-between font-semibold text-foreground">
                                  <span className="flex items-center gap-3">
@@ -304,8 +277,8 @@ export default async function CourseDetail({ params }: Props) {
                   {/* About the Instructor */}
                   <div className="">
                      <h3 className="text-2xl font-bold text-foreground mb-6">About the instructor</h3>
-                     <div className="bg-card border border-border rounded-lg p-8 hover:border-primary/30 transition-colors">
-                        <div className="flex flex-col items-center text-center mb-6">
+                     <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/60 transition-colors">
+                        <div className="flex flex-col items-center text-center mb-2">
                            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 border-2 border-primary/20 mb-4">
                               <span className="text-3xl font-bold text-primary">
                                  {course.instructor.charAt(0)}
@@ -326,9 +299,9 @@ export default async function CourseDetail({ params }: Props) {
                         {skillsGained.map((skill, index) => (
                            <Badge
                               key={index}
-                              className="px-4 py-2 bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 w-full justify-start text-sm font-medium"
+                              className="px-2 py-2 mr-2 bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 text-sm font-small"
                            >
-                              <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
+                              <CheckCircle className="w-4 h-4 mr-1 flex-shrink-0" />
                               {skill}
                            </Badge>
                         ))}

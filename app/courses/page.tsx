@@ -6,11 +6,18 @@ import { Star, Users, Clock } from 'lucide-react'
 import courseImage from '@/public/assets/course_sample.jpeg';
 import Image from 'next/image'
 import { coursesData } from '@/lib/data/course-data'
+import { BreadcrumbType } from '@/models/breadcrumbType'
+
+const breadcrumbItems: BreadcrumbType[] = [
+   { label: 'Home', href: '/' },
+   { label: 'Courses' },
+]
 
 export default function page() {
    return (
-      <div>
+      <div className='bg-white'>
          <Banner
+            breadcrumbItems={breadcrumbItems}
             title='Our Courses'
             description='Empowering learners worldwide with quality education and transforming lives through accessible online learning.'
          />

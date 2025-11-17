@@ -1,16 +1,28 @@
 import Banner from '@/components/shared/banner'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from '@/components/ui/input'
 import { Label } from '@radix-ui/react-label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Send, Mail, Phone, MapPin } from 'lucide-react'
-import React from 'react'
+import { BreadcrumbType } from '@/models/breadcrumbType'
+
+const breadcrumbItems: BreadcrumbType[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Contact Us' },
+]
 
 export default function page() {
   return (
     <div>
       <Banner
+        breadcrumbItems={breadcrumbItems}
         title='Get in Touch'
         description="Have questions? We' d love to hear from you. Send us a message and we'll respond as soon as possible."
       />
@@ -27,63 +39,66 @@ export default function page() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {/* <form onSubmit={handleSubmit} className="space-y-6"> */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
+                  <form
+                    className="space-y-6"
+                  // onSubmit={handleSubmit}
+                  >
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <Field>
+                        <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                        <Input
+                          id="name"
+                          name="name"
+                          placeholder="John Doe"
+                          // value={formData.name}
+                          // onChange={handleChange}
+                          required
+                        />
+                      </Field>
+                      <Field>
+                        <FieldLabel htmlFor="email">Email Address</FieldLabel>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          placeholder="john@example.com"
+                          // value={formData.email}
+                          // onChange={handleChange}
+                          required
+                        />
+                      </Field>
+                    </div>
+
+                    <Field>
+                      <FieldLabel htmlFor="subject">Subject</FieldLabel>
                       <Input
-                        id="name"
-                        name="name"
-                        placeholder="John Doe"
-                        // value={formData.name}
+                        id="subject"
+                        name="subject"
+                        placeholder="How can we help you?"
+                        // value={formData.subject}
                         // onChange={handleChange}
                         required
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        // value={formData.email}
+                    </Field>
+
+                    <Field>
+                      <FieldLabel htmlFor="message">Message</FieldLabel>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        placeholder="Tell us more about your inquiry..."
+                        // value={formData.message}
                         // onChange={handleChange}
+                        className="min-h-[150px]"
                         required
                       />
-                    </div>
-                  </div>
+                    </Field>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      placeholder="How can we help you?"
-                      // value={formData.subject}
-                      // onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      placeholder="Tell us more about your inquiry..."
-                      // value={formData.message}
-                      // onChange={handleChange}
-                      className="min-h-[150px]"
-                      required
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full" size="lg">
-                    <Send className="mr-2 h-4 w-4" />
-                    Send Message
-                  </Button>
-                  {/* </form> */}
+                    <Button type="submit" className="w-full" size="lg">
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Message
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             </div>
@@ -99,7 +114,7 @@ export default function page() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10 text-primary">
+                    <div className="p-3 rounded-lg bg-accent text-primary">
                       <Mail className="h-5 w-5" />
                     </div>
                     <div>
@@ -111,7 +126,7 @@ export default function page() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-lg bg-accent/10 text-accent">
+                    <div className="p-3 rounded-lg bg-accent text-primary">
                       <Phone className="h-5 w-5" />
                     </div>
                     <div>
@@ -123,7 +138,7 @@ export default function page() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10 text-primary">
+                    <div className="p-3 rounded-lg bg-accent text-primary">
                       <MapPin className="h-5 w-5" />
                     </div>
                     <div>
@@ -138,7 +153,7 @@ export default function page() {
                 </CardContent>
               </Card>
 
-              <Card className="border-border/50 shadow-lg bg-gradient-to-br from-primary/5 to-accent/5">
+              <Card className="border-border/50 shadow-lg">
                 <CardHeader>
                   <CardTitle>Office Hours</CardTitle>
                 </CardHeader>

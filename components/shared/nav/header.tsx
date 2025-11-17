@@ -24,13 +24,13 @@ export default function Header() {
 
             <nav className="hidden md:flex items-center space-x-6">
                <Link href="/"
-                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Home
                </Link>
                <Link href="/courses"
-                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/courses') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/courses') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Courses
@@ -46,13 +46,13 @@ export default function Header() {
             </Link>
           )} */}
                <Link href="/about"
-                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/about') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/about') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   About Us
                </Link>
                <Link href="/contact-us"
-                  className={`text-lg font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
+                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
                      }`}
                >
                   Contact
