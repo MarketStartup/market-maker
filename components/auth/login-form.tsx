@@ -19,14 +19,14 @@ export function LoginForm({
          <Card className="overflow-hidden p-0">
             <CardContent className="grid p-0 md:grid-cols-2">
                <form className="p-6 md:p-8">
-                  <FieldGroup>
+                  <FieldGroup className="gap-5">
                      <div className="flex flex-col items-center gap-2 text-center">
                         <h1 className="text-2xl font-bold">Welcome back</h1>
                         <p className="text-muted-foreground text-sm text-balance">
                            Login to your account
                         </p>
                      </div>
-                     <Field>
+                     <Field className="gap-2">
                         <FieldLabel htmlFor="email">Email</FieldLabel>
                         <Input
                            id="email"
@@ -35,7 +35,7 @@ export function LoginForm({
                            required
                         />
                      </Field>
-                     <Field>
+                     <Field className="gap-2">
                         <div className="flex items-center">
                            <FieldLabel htmlFor="password">Password</FieldLabel>
                            <a
@@ -59,6 +59,8 @@ export function LoginForm({
                   <Image
                      src="https://ui.shadcn.com/placeholder.svg"
                      alt="Image"
+                     width={500}
+                     height={500}
                      className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                   />
                </div>

@@ -28,7 +28,7 @@ export default function page() {
       />
       <section className="py-16">
         <div className="container">
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Contact Form */}
             <div className="md:col-span-2">
               <Card className="border-border/50 shadow-lg">
@@ -155,7 +155,7 @@ export default function page() {
 
               <Card className="border-border/50 shadow-lg">
                 <CardHeader>
-                  <CardTitle>Office Hours</CardTitle>
+                  <CardTitle>Contact Hours</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   <div className="flex justify-between">
