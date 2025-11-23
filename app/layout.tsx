@@ -4,6 +4,7 @@ import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/shared/nav/header";
 import Footer from "@/components/shared/nav/footer";
+import { ThemeProvider } from "@/lib/theme-context";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,10 +28,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
+      <head>
+        <script
+          async
+          crossOrigin="anonymous"
+          src="https://tweakcn.com/live-preview.min.js"
+        />
+      </head>
       <body className="antialiased">
-        <Header />
-        {children}
-        <Footer />
+        <ThemeProvider >
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

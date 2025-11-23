@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { GraduationCap, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Header() {
    //   const { user, logout } = useAuth();
@@ -74,6 +75,7 @@ export default function Header() {
               </>
             ) : ( */}
                   <>
+                     {/* <ThemeToggle /> */}
                      <Link href="/login">
                         <Button variant="ghost" size="sm">
                            Login

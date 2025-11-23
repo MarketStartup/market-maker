@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react'
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Star, Users, Play, BookOpen, Clock, CheckCircle } from 'lucide-react';

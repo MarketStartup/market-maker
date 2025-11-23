@@ -34,14 +34,14 @@ const services = [
    }
 ];
 
-export default function Feature() {
+export default function Feature({ props }: { props: any }) {
    return (
       <div className="bg-slate-50 py-24">
          <div className="container">
             <SectionHeading
-               badge='CORE CAPABILITIES'
-               title='Enterprise Features Built for Scale'
-               description='Everything you need to manage, track, and optimize learning across your entire organization'
+               badge={props.sectionHeading.badge}
+               title={props.sectionHeading.title}
+               description={props.sectionHeading.subtitle}
             />
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

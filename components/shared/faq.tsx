@@ -44,22 +44,20 @@ const faqs = [
    }
 ]
 
-export default function Faq() {
+export default function Faq({ props }: { props: any }) {
    return (
       <div className="bg-slate-50 py-24">
          <div className="container">
             <SectionHeading
-               badge='FAQ'
-               title='Frequently Asked Questions'
-               description='Everything you need to know about our platform and services'
+               badge={props.sectionHeading.badge}
+               title={props.sectionHeading.title}
+               description={props.sectionHeading.subtitle}
             />
-
-            {/* Accordion */}
             <Accordion type="single" collapsible className="space-y-4">
-               {faqs.map((faq, index) => (
+               {props.items && props.items.map((faq: {id: string, question:string, answer: string}) => (
                   <AccordionItem
-                     key={index}
-                     value={`faq-${index}`}
+                     key={faq.id}
+                     value={`faq-${faq.id}`}
                      className="bg-white border border-slate-200 rounded-lg overflow-hidden transition-colors !border-b 
                         hover:border-[var(--color-primary)] hover:shadow-lg 
                         data-[state=open]:border-[var(--color-primary)]

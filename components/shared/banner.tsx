@@ -1,20 +1,20 @@
 import { BreadcrumbType } from '@/models/breadcrumbType'
 import BreadcrumbWrap from './breadcrumbWrap';
 
-export default function Banner({ breadcrumbItems, title, description }: { breadcrumbItems: BreadcrumbType[], title: string, description?: string }) {
+export default function Banner({ props, breadcrumbItems }: { props: any, breadcrumbItems?: BreadcrumbType[] }) {
    return (
       <section className="py-16 bg-[var(--color-primary)]"
       >
          <div className="container">
-            <BreadcrumbWrap
+            {/* <BreadcrumbWrap
                items={breadcrumbItems}
-            />
+            /> */}
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
-               {title}
+               {props.title}
             </h1>
-            {description &&
+            {props.subtitle &&
                <p className=" max-w-2xl text-md text-gray-200 animate-fade-in mt-4">
-                  {description}
+                  {props.subtitle}
                </p>
             }
          </div>

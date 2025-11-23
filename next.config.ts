@@ -1,11 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
   images: {
     remotePatterns: [
-
       {
         protocol: 'http',
         hostname: 'localhost',
@@ -13,6 +11,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ui.shadcn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'market-cms.vercel.app',
       }
     ],
   },

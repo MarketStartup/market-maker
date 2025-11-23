@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { ChevronDownIcon } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export function RegisterForm({
    className,
@@ -121,7 +122,7 @@ export function RegisterForm({
                         <Button type="submit">Create Account</Button>
                      </Field>
                      <FieldDescription className="text-center">
-                        Already have an account? <a href="/login">Sign in</a>
+                        Already have an account? <Link href="/login">Sign in</Link>
                      </FieldDescription>
                   </FieldGroup>
                </form>
