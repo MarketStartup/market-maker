@@ -35,6 +35,23 @@ export const getHeaderData = async () => {
    }
 };
 
+export const getFooterData = async () => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/globals/footer`);
+      const response = await fetch(url, {
+         next: {
+            revalidate: Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DURATION || "0"),
+            tags: [CacheConstant.revalidateTag]
+         }
+      });
+      const res = await response.json();
+      return res;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
 export const getPageData = async (slug: string, layout?: string) => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/pages${layout ? `?where[layout][equals]=${layout}` : `?where[slug][equals]=${slug}`}`);

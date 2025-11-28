@@ -31,7 +31,13 @@ export interface CourseType {
       id: string
       title: string
    }[]
-   reviews: CourseReviewType[]
+   reviews: CourseReviewType[],
+   batches: {
+      id: string;
+      name: string;
+      startDate: string;
+      endDate: string;
+   }
 }
 export interface CourseReviewType {
    id: string

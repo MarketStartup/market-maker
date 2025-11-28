@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { GraduationCap, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ props }: { props: any }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -50,36 +50,20 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-bold text-white mb-6">Quick Links</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/" className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
-                  Courses
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard" className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
-                  My Dashboard
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {props.quickItems &&
+            <div>
+              <h3 className="text-lg font-bold text-white mb-6">Quick Links</h3>
+              <ul className="space-y-3">
+                {props.quickItems.map((item: any) => (
+                  <li key={item.id}>
+                    <Link href={item.href} className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
 
           <div>
             <h3 className="text-lg font-bold text-white mb-6">Contact Us</h3>
