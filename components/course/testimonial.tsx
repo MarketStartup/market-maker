@@ -4,15 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import useEmblaCarousel from 'embla-carousel-react'
+import { CourseReviewType } from '@/models/courseType'
 
-interface Testimonial {
-   name: string
-   role: string
-   text: string
-   rating: number
-}
-
-export function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
+export function TestimonialCarousel({ testimonials }: { testimonials: CourseReviewType[] }) {
    const [emblaRef, emblaApi] = useEmblaCarousel({
       loop: true,
       align: 'start',
@@ -55,7 +49,7 @@ export function TestimonialCarousel({ testimonials }: { testimonials: Testimonia
                      <div className="relative bg-card border border-border rounded-lg p-4">
                         <div className="mb-4">
                            <div className="flex items-center gap-1 mb-4">
-                              {[...Array(testimonial.rating)].map((_, i) => (
+                              {[...Array(parseInt(testimonial.rating))].map((_, i) => (
                                  <Star
                                     key={i}
                                     className="w-4 h-4 fill-yellow-400 text-yellow-400"
@@ -64,13 +58,12 @@ export function TestimonialCarousel({ testimonials }: { testimonials: Testimonia
                            </div>
                            <Quote className="w-6 h-6 text-primary/30 mb-4" />
                            <p className="text-foreground mb-4 leading-relaxed text-lg italic">
-                              "{testimonial.text}"
+                              "{testimonial.review}"
                            </p>
                         </div>
 
                         <div className="pt-4 border-t border-border">
-                           <p className="font-semibold text-foreground text-base">{testimonial.name}</p>
-                           <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                           <p className="font-semibold text-foreground text-base">{testimonial.reviewer}</p>
                         </div>
                      </div>
                   </div>

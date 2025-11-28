@@ -4,5 +4,6 @@ export const CacheConstant = {
 
 export const LayoutConstant = {
    PAGE: 'page',
-   NOT_FOUND: 'not_found'
+   NOT_FOUND: 'not_found',
+   COURSE_DETAIL: 'course-detail'
 }

@@ -11,7 +11,7 @@ export default async function Home() {
    return (
       blocks.map((block: any, idx: number) =>
          <div key={idx}>
-            {BlockRenderer(block)}
+            {BlockRenderer('', block)}
          </div>
       )
    );

@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props) {
    const slug = slugArray?.[0] ?? '';
    const subSlug = slugArray?.[1] ?? '';
 
-   const { metaTitle, metaDescription } = await getPageBlocks(slug);
+   const { metaTitle, metaDescription } = await getPageBlocks(slug, subSlug);
    const canonicalUrl = BASE_URL + slug
 
    return {
@@ -48,14 +48,14 @@ export default async function Page({ params }: Props) {
    const slug = slugArray?.[0] ?? '';
    const subSlug = slugArray?.[1] ?? '';
 
-   const { layout, blocks } = await getPageBlocks(slug);
+   const { layout, blocks, course } = await getPageBlocks(slug, subSlug);
    if (layout === LayoutConstant.NOT_FOUND)
       return notFound();
 
    return (
       blocks.map((block: any, idx: number) =>
          <div key={idx}>
-            {BlockRenderer(block)}
+            {BlockRenderer(slug, block, course)}
          </div>
       )
    );

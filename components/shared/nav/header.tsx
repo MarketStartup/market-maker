@@ -3,13 +3,15 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, Menu } from 'lucide-react';
+import { GraduationCap, LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Header() {
-   //   const { user, logout } = useAuth();
+export default function Header({ props }: { props: any }) {
+   const { data: session, status: sessionStatus } = useSession();
    const pathname = usePathname();
    const [open, setOpen] = useState(false);
 
@@ -24,68 +26,42 @@ export default function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center space-x-6">
-               <Link href="/"
-                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/60'
-                     }`}
-               >
-                  Home
-               </Link>
-               <Link href="/courses"
-                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/courses') ? 'text-primary' : 'text-foreground/60'
-                     }`}
-               >
-                  Courses
-               </Link>
-               {/* {user && (
-            <Link
-              to="/enrolled"
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive('/enrolled') ? 'text-primary' : 'text-foreground/60'
-              }`}
-            >
-              My Courses
-            </Link>
-          )} */}
-               <Link href="/about"
-                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/about') ? 'text-primary' : 'text-foreground/60'
-                     }`}
-               >
-                  About Us
-               </Link>
-               <Link href="/contact-us"
-                  className={`text-md font-medium transition-colors hover:text-primary ${isActive('/contact-us') ? 'text-primary' : 'text-foreground/60'
-                     }`}
-               >
-                  Contact
-               </Link>
+               {props.map((item: any) => (
+                  <Link
+                     key={`desktop-${item.id}`}
+                     href={item.href}
+                     className={`text-md font-medium transition-colors hover:text-primary ${isActive(item.href) ? 'text-primary' : 'text-foreground/60'
+                        }`}
+                  >
+                     {item.label}
+                  </Link>
+               ))}
             </nav>
 
             <div className="flex items-center space-x-4">
                {/* Desktop Auth Buttons */}
                <div className="hidden md:flex items-center space-x-4">
-                  {/* {user ? (
-              <>
-                <span className="text-sm text-muted-foreground hidden sm:inline">
-                  Welcome, {user.name}
-                </span>
-                <Button variant="outline" size="sm" onClick={logout}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
-              </>
-            ) : ( */}
-                  <>
-                     {/* <ThemeToggle /> */}
-                     <Link href="/login">
-                        <Button variant="ghost" size="sm">
-                           Login
-                        </Button>
-                     </Link>
-                     <Link href="/register">
-                        <Button size="sm">Get Started</Button>
-                     </Link>
-                  </>
-                  {/* )} */}
+                  {/* <ThemeToggle /> */}
+                  {sessionStatus === 'loading' ? (
+                     <Skeleton className='h-7 w-[100px]' />
+                  ) : (
+                     session && session.user ? (
+                        <Link href="/dashboard">
+                           <Button className="bg-primary text-primary-foreground hover:opacity-90">Dashboard</Button>
+                        </Link>
+                     ) : (
+                        <>
+                           <Link href="/login">
+                              <Button variant="ghost" size="sm">
+                                 Login
+                              </Button>
+                           </Link>
+                           <Link href="/register">
+                              <Button size="sm">Get Started</Button>
+                           </Link>
+                        </>
+                     )
+                  )}
                </div>
 
                {/* Mobile Menu */}
@@ -103,10 +79,19 @@ export default function Header() {
                         </SheetTitle>
                      </SheetHeader>
                      <nav className="flex flex-col space-y-4 mt-8">
-                        <Link href="/"
+                        {props.map((item: any) => (
+                           <Link
+                              key={`mobile-${item.id}`}
+                              href={item.href}
+                              className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${isActive('/') ? 'text-primary bg-accent' : 'text-foreground'
+                                 }`}
+                           >
+                              {item.label}
+                           </Link>
+                        ))}
+                        {/* <Link href="/"
                            onClick={() => setOpen(false)}
-                           className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${isActive('/') ? 'text-primary bg-accent' : 'text-foreground'
-                              }`}
+
                         >
                            Home
                         </Link>
@@ -116,19 +101,8 @@ export default function Header() {
                               }`}
                         >
                            Courses
-                        </Link>
-                        {/* {user && (
-                  <Link
-                    to="/enrolled"
-                    onClick={() => setOpen(false)}
-                    className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${
-                      isActive('/enrolled') ? 'text-primary bg-accent' : 'text-foreground'
-                    }`}
-                  >
-                    My Courses
-                  </Link>
-                )} */}
-                        <Link href="/about"
+                        </Link> */}
+                        {/* <Link href="/about"
                            onClick={() => setOpen(false)}
                            className={`text-lg font-medium transition-colors hover:text-primary px-2 py-2 rounded-md ${isActive('/about') ? 'text-primary bg-accent' : 'text-foreground'
                               }`}
@@ -141,7 +115,7 @@ export default function Header() {
                               }`}
                         >
                            Contact
-                        </Link>
+                        </Link> */}
 
                         <div className="pt-4 border-t space-y-2">
                            {/* {user ? (

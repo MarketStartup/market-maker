@@ -11,7 +11,6 @@ import { ArrowRight, ArrowRightLeft } from "lucide-react";
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const HomeBanner = ({ props }: any) => {
-   console.log({ props });
 
    return (
       <div className="bg-white relative overflow-hidden">
