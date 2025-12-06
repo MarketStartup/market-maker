@@ -1,39 +1,8 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Star, Users, Play, BookOpen, Clock, CheckCircle } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Play, BookOpen, Clock, CheckCircle } from 'lucide-react';
 import { CourseType } from "@/models/courseType"
 import { TestimonialCarousel } from '@/components/course/testimonial';
-
-
-const skillsGained = [
-   'JavaScript Fundamentals',
-   'React Components',
-   'State Management',
-   'API Integration',
-   'Performance Optimization',
-   'Testing & Debugging',
-]
-
-const testimonials = [
-   {
-      name: 'Sarah Chen',
-      role: 'Junior Developer',
-      text: 'This course completely changed my career trajectory. The practical projects were incredibly valuable.',
-      rating: 5,
-   },
-   {
-      name: 'Michael Rodriguez',
-      role: 'Full Stack Engineer',
-      text: 'Best investment I made this year. The instructor explains complex concepts in an easy-to-understand way.',
-      rating: 5,
-   },
-   {
-      name: 'Emma Thompson',
-      role: 'Tech Lead',
-      text: 'Great content with excellent real-world examples. Highly recommend to anyone serious about learning.',
-      rating: 5,
-   },
-]
 
 export default function CourseDetail({ course }: { course?: CourseType }) {
    if (!course)
@@ -79,29 +48,29 @@ export default function CourseDetail({ course }: { course?: CourseType }) {
                <div>
                   <h2 className="text-3xl font-bold text-foreground mb-8">Course Curriculum</h2>
                   <div className="space-y-4">
-                     {[1, 2, 3, 4, 5].map((week) => (
+                     {course.curriculums.map((curriculum, sectionIndex: number) => (
                         <details
-                           key={week}
+                           key={curriculum.id}
                            className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/60 transition-colors"
                         >
                            <summary className="px-8 py-6 cursor-pointer hover:bg-muted transition-colors flex items-center justify-between font-semibold text-foreground">
                               <span className="flex items-center gap-3">
-                                 <span className="text-primary font-bold">Section {week}</span>
-                                 <span>Course Module</span>
+                                 <span className="text-primary font-bold">Section {sectionIndex + 1}</span>
+                                 <span>{curriculum.sectionTitle}</span>
                               </span>
                               <span className="text-muted-foreground group-open:rotate-180 transition-transform">
                                  ▼
                               </span>
                            </summary>
                            <div className="px-8 py-4 border-t border-border bg-muted/50 space-y-3">
-                              {[1, 2, 3].map((lesson) => (
+                              {curriculum.lessons.map((lesson, lessionIndex) => (
                                  <div
-                                    key={lesson}
+                                    key={lesson.id}
                                     className="flex items-center gap-4 p-4 rounded hover:bg-background transition-colors"
                                  >
                                     <Play className="w-4 h-4 text-primary flex-shrink-0" />
-                                    <span className="text-foreground flex-1">Lesson {lesson}: Key Concepts</span>
-                                    <span className="text-xs text-muted-foreground whitespace-nowrap">15 min</span>
+                                    <span className="text-foreground flex-1">Lesson {lessionIndex + 1}: {lesson.lessonTitle}</span>
+                                    <span className="text-xs text-muted-foreground whitespace-nowrap">{lesson.lessonDuration}</span>
                                  </div>
                               ))}
                            </div>
@@ -133,9 +102,10 @@ export default function CourseDetail({ course }: { course?: CourseType }) {
                   <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/60 transition-colors">
                      <div className="flex flex-col items-center text-center mb-2">
                         <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 border-2 border-primary/20 mb-4">
-                           <span className="text-3xl font-bold text-primary">
-                              {course.instructor.image?.url || course.instructor.name.charAt(0)}
-                           </span>
+                           <Avatar className='size-full'>
+                              <AvatarImage src={course.instructor.image?.url} alt={course.instructor.name} />
+                              <AvatarFallback>{course.instructor.name.charAt(0)}</AvatarFallback>
+                           </Avatar>
                         </div>
                         <h4 className="text-lg font-bold text-foreground">{course.instructor.name}</h4>
                      </div>

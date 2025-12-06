@@ -8,6 +8,7 @@ export async function getPageBlocks(slug?: string, subSlug?: string):
       metaTitle: string,
       metaDescription: string,
       blocks: any,
+      pageTitle?: string,
       course?: CourseType
    }> {
    if (!slug) {
@@ -60,7 +61,8 @@ export async function getPageBlocks(slug?: string, subSlug?: string):
          layout: LayoutConstant.PAGE,
          metaTitle: pageData.metaTitle,
          metaDescription: pageData.metaDescription,
-         blocks: pageData.blocks
+         blocks: pageData.blocks,
+         pageTitle: pageData.title
       }
    return {
       layout: LayoutConstant.NOT_FOUND,

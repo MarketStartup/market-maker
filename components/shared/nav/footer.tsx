@@ -50,13 +50,16 @@ export default function Footer({ props }: { props: any }) {
             </div>
           </div>
 
-          {props.quickItems &&
+          {props.quickLinks &&
             <div>
               <h3 className="text-lg font-bold text-white mb-6">Quick Links</h3>
               <ul className="space-y-3">
-                {props.quickItems.map((item: any) => (
+                {props.quickLinks.map((item: { id: string; label: string; href: string }) => (
                   <li key={item.id}>
-                    <Link href={item.href} className="text-gray-400 hover:text-[var(--color-primary)] transition-colors">
+                    <Link
+                      href={item.href}
+                      className="text-gray-400 hover:text-[var(--color-primary)] transition-colors"
+                    >
                       {item.label}
                     </Link>
                   </li>
@@ -96,16 +99,16 @@ export default function Footer({ props }: { props: any }) {
           <p className="text-sm text-muted-foreground">
             © {currentYear} Market Makers. All rights reserved.
           </p>
-          <nav className="flex gap-4 text-sm">
-            <a href="#" className='hover:underline'>
-              Privacy Policy
-            </a>
-            <a href="#" className='hover:underline'>
-              Terms of Service
-            </a>
-            {/* <a href="#" className='hover:underline'>
-              Cookie Settings
-            </a> */}
+          <nav className="flex flex-wrap text-sm gap-3 justify-center">
+            {props.policies.map((item: { id: string; label: string; href: string }) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className='hover:underline'
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>

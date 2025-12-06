@@ -4,7 +4,7 @@ export interface CourseType {
    slug: string
    description: string
    image: {
-      url: string,
+      url: string
       alt: string
    }
    rating: number
@@ -19,7 +19,7 @@ export interface CourseType {
       name: string
       bio: string
       image?: {
-         url: string,
+         url: string
          alt: string
       }
    }
@@ -31,7 +31,16 @@ export interface CourseType {
       id: string
       title: string
    }[]
-   reviews: CourseReviewType[],
+   curriculums: {
+      id: string
+      sectionTitle: string
+      lessons: {
+         id: string
+         lessonTitle: string
+         lessonDuration: string
+      }[]
+   }[]
+   reviews: CourseReviewType[]
    batches: {
       id: string;
       name: string;

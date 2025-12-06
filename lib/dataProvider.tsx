@@ -15,13 +15,14 @@ const Faq = dynamic(() => import('@/components/shared/faq'));
 const PromoBanner = dynamic(() => import('@/components/shared/promoBanner'));
 const CourseDetailBanner = dynamic(() => import('@/components/course/courseDetailBanner'));
 const CourseDetail = dynamic(() => import('@/components/course/courseDetail'));
+const GeneralInformation = dynamic(() => import('@/components/shared/generalInformation'));
 
-export default function BlockRenderer(slug: string, block: any, course?: CourseType) {
+export default function BlockRenderer(slug: string, block: any, pageTitle?: string, course?: CourseType) {
    switch (block.blockType) {
       case "homeBanner":
          return <HomeBanner props={block} />;
       case "banner":
-         return <Banner props={block} />;
+         return <Banner props={block} pageTitle={pageTitle} />;
       case "courseDetailBanner":
          return <CourseDetailBanner slug={slug} course={course} />;
       case "promoBanner":
@@ -44,6 +45,8 @@ export default function BlockRenderer(slug: string, block: any, course?: CourseT
          return <CourseListing slug={slug} />;
       case "courseDetail":
          return <CourseDetail course={course} />;
+      case "generalInformation":
+         return <GeneralInformation props={block} />;
       default:
          return null;
    }

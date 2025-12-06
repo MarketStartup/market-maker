@@ -48,14 +48,14 @@ export default async function Page({ params }: Props) {
    const slug = slugArray?.[0] ?? '';
    const subSlug = slugArray?.[1] ?? '';
 
-   const { layout, blocks, course } = await getPageBlocks(slug, subSlug);
+   const { layout, pageTitle, blocks, course } = await getPageBlocks(slug, subSlug);
    if (layout === LayoutConstant.NOT_FOUND)
       return notFound();
 
    return (
       blocks.map((block: any, idx: number) =>
          <div key={idx}>
-            {BlockRenderer(slug, block, course)}
+            {BlockRenderer(slug, block, pageTitle, course)}
          </div>
       )
    );

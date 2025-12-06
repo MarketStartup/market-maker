@@ -62,8 +62,8 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                               />
                            ))}
                         </div>
-                        <span className="font-bold text-lg">{course.rating}</span>
-                        <span className="text-gray-400">({course.student.toLocaleString()} reviews)</span>
+                        {/* <span className="font-bold text-lg">{course.rating}</span> */}
+                        <span className="text-gray-400">({course.review.toLocaleString()} reviews)</span>
                      </div>
 
                      <div className="flex items-center gap-2">
