@@ -69,7 +69,7 @@ export function LoginForm({
    return (
       <div className={cn("flex flex-col gap-6", className)} {...props}>
          <Card className="overflow-hidden p-0">
-            <CardContent className="grid p-0 md:grid-cols-2">
+            <CardContent className="grid p-0">
                <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
                   <FieldGroup className="gap-5">
                      <div className="flex flex-col items-center gap-2 text-center">
@@ -105,7 +105,7 @@ export function LoginForm({
                            <FieldLabel htmlFor="password">Password</FieldLabel>
                            <a
                               href="#"
-                              className="ml-auto text-sm underline-offset-2 hover:underline"
+                              className="ml-auto text-sm text-gray-500 underline-offset-2 hover:underline"
                            >
                               Forgot your password?
                            </a>
@@ -135,22 +135,11 @@ export function LoginForm({
                      </FieldDescription>
                   </FieldGroup>
                </form>
-
-               <div className="bg-muted relative hidden md:block">
-                  <Image
-                     src="https://ui.shadcn.com/placeholder.svg"
-                     alt="Image"
-                     width={500}
-                     height={500}
-                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                  />
-               </div>
             </CardContent>
          </Card>
 
-         <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-            and <a href="#">Privacy Policy</a>.
+         <FieldDescription className=" text-center">
+            By clicking continue, you agree to our <a href="/privacy-policy">Privacy Policy</a>.
          </FieldDescription>
       </div>
    )

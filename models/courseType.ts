@@ -43,7 +43,8 @@ export interface CourseType {
    reviews: CourseReviewType[]
    batches: {
       docs: CourseBatchType[]
-   }
+   },
+   updatedAt: string
 }
 export interface CourseReviewType {
    id: string

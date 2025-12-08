@@ -9,24 +9,37 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
 
-export default function Header({ props }: { props: any }) {
+export default function Header({ commonProps, headerProps }: { commonProps: any, headerProps: any }) {
    const { data: session, status: sessionStatus } = useSession();
    const pathname = usePathname();
    const [open, setOpen] = useState(false);
 
    const isActive = (path: string) => pathname === path;
 
+   console.log({ commonProps })
+
    return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
          <div className="container flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-               <GraduationCap className="h-6 w-6 text-primary" />
-               <span className="text-xl font-bold text-primary">Market Makers</span>
+               {commonProps?.logo?.url ?
+                  <Image className='h-[50px]'
+                     src={commonProps.logo.url}
+                     alt={commonProps.logo.alt}
+                     height={100}
+                     width={100}
+                  /> :
+                  <>
+                     <GraduationCap className="h-6 w-6 text-primary" />
+                     <span className="text-xl font-bold text-primary">Market Makers</span>
+                  </>
+               }
             </Link>
 
             <nav className="hidden md:flex items-center space-x-6">
-               {props.map((item: any) => (
+               {headerProps.map((item: any) => (
                   <Link
                      key={`desktop-${item.id}`}
                      href={item.href}
@@ -57,7 +70,7 @@ export default function Header({ props }: { props: any }) {
                               </Button>
                            </Link>
                            <Link href="/register">
-                              <Button size="sm">Get Started</Button>
+                              <Button size="sm">Register</Button>
                            </Link>
                         </>
                      )
@@ -79,7 +92,7 @@ export default function Header({ props }: { props: any }) {
                         </SheetTitle>
                      </SheetHeader>
                      <nav className="flex flex-col space-y-4 mt-8">
-                        {props.map((item: any) => (
+                        {headerProps.map((item: any) => (
                            <Link
                               key={`mobile-${item.id}`}
                               href={item.href}
@@ -143,7 +156,7 @@ export default function Header({ props }: { props: any }) {
                                  </Button>
                               </Link>
                               <Link href="/register" onClick={() => setOpen(false)} className="block">
-                                 <Button className="w-full">Get Started</Button>
+                                 <Button className="w-full">Register</Button>
                               </Link>
                            </>
                            {/* )} */}

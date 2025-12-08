@@ -1,6 +1,23 @@
 import { CourseType } from "@/models/courseType";
 import { CacheConstant } from "./constants";
 
+export const getCommonData = async () => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/globals/common`);
+      const response = await fetch(url, {
+         next: {
+            revalidate: Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DURATION || "0"),
+            tags: [CacheConstant.revalidateTag]
+         }
+      });
+      const res = await response.json();
+      return res;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
 export const getHomePageData = async () => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/globals/home`);
@@ -112,7 +129,7 @@ export const userLogin = async (email: string, password: string): Promise<{ stat
    }
 };
 
-export const userRegister = async (firstName: string, lastName: string, dob: string, state: string, email: string, password: string): Promise<{ status: boolean; message: string }> => {
+export const userRegister = async (firstName: string, lastName: string, dob: string, state: string, mobile: string, email: string, password: string): Promise<{ status: boolean; message: string }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users`);
       const response = await fetch(url, {
@@ -127,6 +144,7 @@ export const userRegister = async (firstName: string, lastName: string, dob: str
             "lastName": lastName,
             "dob": dob,
             "state": state,
+            "mobile": mobile,
             "email": email,
             "password": password
          }),

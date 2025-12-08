@@ -24,6 +24,7 @@ import {
    PopoverContent,
    PopoverTrigger,
 } from "@/components/ui/popover"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { ChevronDown, ChevronsUpDown, Check } from "lucide-react"
@@ -39,6 +40,7 @@ type FormData = {
    lastName: string;
    state: string;
    dob: Date | undefined;
+   mobile: string;
    email: string;
    password: string;
    confirmPassword: string;
@@ -77,7 +79,7 @@ export function RegisterForm({
    return (
       <div className={cn("flex flex-col gap-6", className)} {...props}>
          <Card className="overflow-hidden p-0">
-            <CardContent className="grid p-0 md:grid-cols-2">
+            <CardContent className="grid p-0">
                <div className="p-6 md:p-8">
                   <FieldGroup className="gap-5">
                      <div className="flex flex-col items-center gap-2 text-center">
@@ -200,6 +202,26 @@ export function RegisterForm({
                         </Field>
                      </Field>
                      <Field className="gap-2">
+                        <FieldLabel htmlFor="mobile">Mobile number</FieldLabel>
+                        <Input
+                           id="mobile"
+                           type="tel"            // or "text", but NOT "number"
+                           inputMode="numeric"   // shows numeric keypad on mobile
+                           maxLength={10}        // UI cap
+                           {...register("mobile", {
+                              required: "Mobile number is required",
+                              onChange: (e) => {
+                                 // keep only digits & limit to 10
+                                 const onlyNums = e.target.value.replace(/\D/g, "").slice(0, 10)
+                                 e.target.value = onlyNums
+                              },
+                              validate: (value) =>
+                                 /^\d{10}$/.test(value) || "Mobile number must be 10 digits",
+                           })}
+                        />
+                        {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile.message}</p>}
+                     </Field>
+                     <Field className="gap-2">
                         <FieldLabel htmlFor="email">Email</FieldLabel>
                         <Input
                            id="email"
@@ -218,32 +240,32 @@ export function RegisterForm({
                      <Field className="grid grid-cols-2 gap-4">
                         <Field className="gap-2">
                            <FieldLabel htmlFor="password">Password</FieldLabel>
-                           <Input
+                           <PasswordInput
                               id="password"
-                              type="password"
                               {...register("password", {
                                  required: "Password is required",
                                  minLength: {
                                     value: 6,
-                                    message: "Password must be at least 6 characters"
-                                 }
+                                    message: "Password must be at least 6 characters",
+                                 },
                               })}
                            />
-                           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                           {errors.password && (
+                              <p className="text-red-500 text-sm">{errors.password.message}</p>
+                           )}
                         </Field>
                         <Field className="gap-2">
-                           <FieldLabel htmlFor="confirm-password">
-                              Confirm Password
-                           </FieldLabel>
-                           <Input
+                           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
+                           <PasswordInput
                               id="confirm-password"
-                              type="password"
                               {...register("confirmPassword", {
                                  required: "Please confirm your password",
-                                 validate: (value) => value === password || "Passwords do not match"
+                                 validate: (value) => value === password || "Passwords do not match",
                               })}
                            />
-                           {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+                           {errors.confirmPassword && (
+                              <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+                           )}
                         </Field>
                      </Field>
                      <Field>
@@ -260,20 +282,10 @@ export function RegisterForm({
                      </FieldDescription>
                   </FieldGroup>
                </div>
-               <div className="bg-muted relative hidden md:block">
-                  <Image
-                     src="https://ui.shadcn.com/placeholder.svg"
-                     alt="Image"
-                     width={500}
-                     height={500}
-                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                  />
-               </div>
             </CardContent>
          </Card>
-         <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-            and <a href="#">Privacy Policy</a>.
+         <FieldDescription className=" text-center">
+            By clicking continue, you agree to our <a href="/privacy-policy">Privacy Policy</a>.
          </FieldDescription>
       </div>
    )

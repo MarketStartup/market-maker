@@ -6,9 +6,12 @@ import {
    CardContent
 } from '@/components/ui/card'
 import { Mail, Phone, MapPin } from 'lucide-react'
+import { getCommonData } from '@/lib/api';
 import ContactForm from './contactForm'
 
-export default function ContactFormWrapper() {
+export default async function ContactFormWrapper() {
+   const commonData = await getCommonData();
+
    return (
       <section className="py-16">
          <div className="container">
@@ -26,43 +29,50 @@ export default function ContactFormWrapper() {
                         </CardDescription>
                      </CardHeader>
                      <CardContent className="space-y-6">
-                        <div className="flex items-start gap-4">
-                           <div className="p-3 rounded-lg bg-accent text-primary">
-                              <Mail className="h-5 w-5" />
+                        {commonData.emails &&
+                           <div className="flex items-start gap-4">
+                              <div className="p-3 rounded-lg bg-accent text-primary">
+                                 <Mail className="h-5 w-5" />
+                              </div>
+                              <div>
+                                 <h3 className="font-semibold mb-1">Email</h3>
+                                 {commonData.emails.map((item: { id: string; email: string }) => (
+                                    <p key={item.id} className="text-sm text-muted-foreground">
+                                       support@learnhub.com
+                                    </p>
+                                 ))}
+                              </div>
                            </div>
-                           <div>
-                              <h3 className="font-semibold mb-1">Email</h3>
-                              <p className="text-sm text-muted-foreground">
-                                 support@learnhub.com
-                              </p>
-                           </div>
-                        </div>
+                        }
 
-                        <div className="flex items-start gap-4">
-                           <div className="p-3 rounded-lg bg-accent text-primary">
-                              <Phone className="h-5 w-5" />
+                        {commonData.mobiles &&
+                           <div className="flex items-start gap-4">
+                              <div className="p-3 rounded-lg bg-accent text-primary">
+                                 <Phone className="h-5 w-5" />
+                              </div>
+                              <div>
+                                 <h3 className="font-semibold mb-1">Phone</h3>
+                                 {commonData.mobiles.map((item: { id: string; mobile: string }) => (
+                                    <p key={item.id} className="text-sm text-muted-foreground">
+                                       +1 (555) 123-4567
+                                    </p>
+                                 ))}
+                              </div>
                            </div>
-                           <div>
-                              <h3 className="font-semibold mb-1">Phone</h3>
-                              <p className="text-sm text-muted-foreground">
-                                 +1 (555) 123-4567
-                              </p>
+                        }
+                        {commonData.address &&
+                           <div className="flex items-start gap-4">
+                              <div className="p-3 rounded-lg bg-accent text-primary">
+                                 <MapPin className="h-5 w-5" />
+                              </div>
+                              <div>
+                                 <h3 className="font-semibold mb-1">Address</h3>
+                                 <p className="text-sm text-muted-foreground">
+                                    {commonData.address}
+                                 </p>
+                              </div>
                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                           <div className="p-3 rounded-lg bg-accent text-primary">
-                              <MapPin className="h-5 w-5" />
-                           </div>
-                           <div>
-                              <h3 className="font-semibold mb-1">Address</h3>
-                              <p className="text-sm text-muted-foreground">
-                                 123 Learning Street<br />
-                                 San Francisco, CA 94102<br />
-                                 United States
-                              </p>
-                           </div>
-                        </div>
+                        }
                      </CardContent>
                   </Card>
 

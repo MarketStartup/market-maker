@@ -1,13 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Star, Users, Play, BookOpen, Clock, CheckCircle } from 'lucide-react';
+import { Star, Users, CheckCircle } from 'lucide-react';
 import BreadcrumbWrap from '@/components/shared/breadcrumbWrap';
 import { CourseType } from '@/models/courseType';
 import { BreadcrumbType } from '@/models/breadcrumbType';
 import { Badge } from '@/components/ui/badge';
 import { BatchEnrollDialog } from '../dialog/batchEnrollDialog';
+import { format } from 'date-fns'
 
 export default function CourseDetailBanner({ slug, course }: { slug: string, course?: CourseType }) {
-
    if (!course)
       return null;
 
@@ -39,10 +38,7 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                <div className="md:col-span-2">
                   <div className="flex items-center gap-3 mb-4">
                      <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 hover:bg-yellow-500/20">
-                        Bestseller
-                     </Badge>
-                     <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/20">
-                        Trending
+                        {course.category}
                      </Badge>
                   </div>
 
@@ -69,7 +65,8 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
 
                      <div className="flex items-center gap-2">
                         <Users className="w-5 h-5 text-gray-300" />
-                        <span className="text-gray-300">{(course.student / 1000).toFixed(0)}k+ learners</span>
+                        {/* <span className="text-gray-300">{(course.student / 1000).toFixed(0)}k+ learners</span> */}
+                        <span className="text-gray-300">{course.student.toLocaleString()} learners</span>
                      </div>
                   </div>
 
@@ -78,7 +75,7 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                   </div>
 
                   <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
-                     <span>Last updated 11/2025</span>
+                     <span>Last updated {format(course.updatedAt, 'dd-MMM-yyyy')}</span>
                      <span>English</span>
                   </div>
                </div>
@@ -87,7 +84,7 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                   <div className="mb-6">
                      <p className="text-xs font-bold text-slate-600 tracking-widest mb-2">COURSE PRICE</p>
                      <div className="flex items-baseline gap-2">
-                        <p className="text-4xl font-bold text-slate-900">${course.price.toFixed(2)}</p>
+                        <p className="text-4xl font-bold text-slate-900">₹{course.price.toFixed(2)}</p>
                      </div>
                   </div>
 

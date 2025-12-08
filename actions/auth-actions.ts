@@ -1,16 +1,16 @@
 'use server';
 
-import { userLogin, userRegister } from "@/lib/api";
+import { userRegister } from "@/lib/api";
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { format } from "date-fns"
 
 export async function registerAction(formData: any) {
-
-   const { firstName, lastName, email, state, dob, password } = formData;
+   const { firstName, lastName, mobile, email, state, dob, password } = formData;
    try {
       const dateObject = new Date(dob);
-      const formattedDob = `${String(dateObject.getMonth() + 1).padStart(2, '0')}-${String(dateObject.getDate()).padStart(2, '0')}-${dateObject.getFullYear()}`;
-      return await userRegister(firstName, lastName, formattedDob, state, email, password);
+      const formattedDob = format(dateObject, "yyyy-MM-dd")
+      return await userRegister(firstName, lastName, formattedDob, state, mobile, email, password);
    } catch (error) {
       return { status: false, message: 'Internal Server Error' };
    }

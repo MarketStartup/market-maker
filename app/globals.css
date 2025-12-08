@@ -38,7 +38,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   --font-heading: var(--font-poppins);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-lexend);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -62,7 +62,7 @@
   --card-foreground: #1e293b;
   --popover: #ffffff;
   --popover-foreground: #1e293b;
-  --primary: #6366f1;
+  --primary: #0073D8;
   --primary-foreground: #ffffff;
   --secondary: #e5e7eb;
   --secondary-foreground: #374151;
@@ -200,4 +200,15 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading), sans-serif;
+}
+
+/* Hide native password reveal / clear buttons ONLY for our custom password input */
+.password-input::-ms-reveal,
+.password-input::-ms-clear {
+  display: none;
+}
+
+/* Some WebKit / Chromium variants that render decoration container */
+.password-input::-webkit-textfield-decoration-container {
+  display: none;
 }
