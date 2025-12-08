@@ -62,7 +62,7 @@ export function RegisterForm({
       try {
          const result = await registerAction(data)
          if (result.status) {
-            toast.success(result.message)
+            toast.success('User registered successfully')
             router.push('/login');
          } else {
             toast.error(result.message)

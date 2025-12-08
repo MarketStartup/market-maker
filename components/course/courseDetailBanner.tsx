@@ -4,6 +4,7 @@ import BreadcrumbWrap from '@/components/shared/breadcrumbWrap';
 import { CourseType } from '@/models/courseType';
 import { BreadcrumbType } from '@/models/breadcrumbType';
 import { Badge } from '@/components/ui/badge';
+import { BatchEnrollDialog } from '../dialog/batchEnrollDialog';
 
 export default function CourseDetailBanner({ slug, course }: { slug: string, course?: CourseType }) {
 
@@ -101,11 +102,12 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                            </Button>
                         </div>
                      ) : ( */}
-                  <Button
+                  {/* <Button
                      className="w-full bg-primary text-primary-foreground hover:opacity-90 py-7 text-base font-semibold shadow-md hover:shadow-lg transition-shadow"
                   >
                      Enroll Now
-                  </Button>
+                  </Button> */}
+                  <BatchEnrollDialog batches={course.batches.docs} />
                   {/* )} */}
 
                   <div className="pt-6 border-t border-slate-200 space-y-4 mt-6">

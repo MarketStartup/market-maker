@@ -3,11 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
-    // unoptimized: true,
+    //unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost:3010',
+        hostname: 'localhost',
       },
       {
         protocol: 'https',

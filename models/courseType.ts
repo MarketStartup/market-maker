@@ -42,10 +42,7 @@ export interface CourseType {
    }[]
    reviews: CourseReviewType[]
    batches: {
-      id: string;
-      name: string;
-      startDate: string;
-      endDate: string;
+      docs: CourseBatchType[]
    }
 }
 export interface CourseReviewType {
@@ -53,4 +50,11 @@ export interface CourseReviewType {
    rating: string
    reviewer: string
    review: string
+}
+
+export interface CourseBatchType {
+   id: string;
+   name: string;
+   startDate: string;
+   endDate: string;
 }
