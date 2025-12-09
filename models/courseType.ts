@@ -23,6 +23,10 @@ export interface CourseType {
          alt: string
       }
    }
+   thisCourseIncludes: {
+      id: string
+      title: string
+   }[]
    whatYouLearnPoints: {
       id: string
       title: string

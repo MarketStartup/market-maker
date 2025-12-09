@@ -10,13 +10,12 @@ import {
    FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { loginAction } from "@/actions/auth-actions" // assumes you have this like registerAction
+import { signIn } from "next-auth/react"
 
 type FormData = {
    email: string
@@ -42,29 +41,27 @@ export function LoginForm({
    })
 
    const onSubmit = async (data: FormData) => {
-      setLoading(true)
+      setLoading(true);
       try {
-         // call your login action (server route) — must return { status: boolean, message?: string, ... }
-         const result = await loginAction(data.email, data.password)
+         const res = await signIn("credentials", {
+            redirect: false,        // we control redirect manually
+            email: data.email,
+            password: data.password,
+         });
 
-         // if (res?.status) {
-         //    toast.success(res.message)
-         //    // navigate to desired location after login
-         //    router.push("/dashboard") // change target as needed
-         // } else {
-         //    toast.error(res?.message)
-         // }
-         if (result?.message) {
-            toast.error(result.message);
-            setLoading(false);
+         if (res?.error) {
+            toast.error("Invalid email or password");
+         } else {
+            toast.success("Logged in successfully");
+            router.push('/dashboard')
          }
       } catch (err: any) {
-         console.error("login error", err)
-         toast.error(err?.message || "Login failed")
+         console.error("login error", err);
+         toast.error(err?.message || "Login failed");
       } finally {
-         setLoading(false)
+         setLoading(false);
       }
-   }
+   };
 
    return (
       <div className={cn("flex flex-col gap-6", className)} {...props}>

@@ -16,26 +16,27 @@ export async function registerAction(formData: any) {
    }
 }
 
-export async function loginAction(email: string, password: string) {
-   try {
-      await signIn("credentials", { email, password, redirectTo: "/dashboard" });
-   } catch (error) {
-      if (error instanceof AuthError) {
-         switch (error.type) {
-            case 'CredentialsSignin':
-               return {
-                  message: 'Invalid credentials',
-               }
-            default:
-               return {
-                  message: 'Something went wrong.',
-               }
-         }
-      }
-      throw error;
-   }
-}
+// export async function loginAction(email: string, password: string) {
+//    try {
+//       await signIn("credentials", {
+//          redirect: false,
+//          email,
+//          password,
+//       })
+//       return { status: true }
+//    } catch (error) {
+//       console.error("loginAction AuthError:", error)
+
+//       if (error instanceof AuthError) {
+//          if (error.type === "CredentialsSignin") {
+//             return { status: false, message: "Invalid email or password" }
+//          }
+//          return { status: false, message: "Authentication error" }
+//       }
+//       return { status: false, message: "Unexpected error" }
+//    }
+// }
 
 export async function handleSignOut() {
-   await signOut({ redirectTo: '/login' });
+   await signOut({ redirect: true, redirectTo: '/login' });
 }

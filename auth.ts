@@ -46,13 +46,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
          return token;
       },
       session({ session, token }) {
-         session.user.firstName = token.firstName;
-         session.user.lastName = token.lastName;
-         session.user.dob = token.dob;
-         session.user.state = token.state;
-         session.user.email = token.email;
-         return session;
+         return {
+            ...session,
+            user: {
+               ...session.user,
+               firstName: token.firstName as string,
+               lastName: token.lastName as string,
+               dob: token.dob as string,
+               state: token.state as string,
+               email: token.email as string,
+            },
+         };
       }
+
    },
    pages: {
       signIn: "/login"

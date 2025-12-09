@@ -1,15 +1,15 @@
 'use client'
 
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { GraduationCap, LogOut, Menu } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { GraduationCap, Menu } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { useSession } from 'next-auth/react';
 
 export default function Header({ commonProps, headerProps }: { commonProps: any, headerProps: any }) {
    const { data: session, status: sessionStatus } = useSession();
@@ -18,7 +18,7 @@ export default function Header({ commonProps, headerProps }: { commonProps: any,
 
    const isActive = (path: string) => pathname === path;
 
-   console.log({ commonProps })
+   console.log("HEADER SESSION", { session, sessionStatus });
 
    return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">

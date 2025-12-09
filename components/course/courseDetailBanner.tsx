@@ -104,30 +104,22 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                   >
                      Enroll Now
                   </Button> */}
-                  <BatchEnrollDialog batches={course.batches.docs} />
+                  <BatchEnrollDialog course={course} batches={course.batches.docs} />
                   {/* )} */}
 
-                  <div className="pt-6 border-t border-slate-200 space-y-4 mt-6">
-                     <p className="text-xs font-bold text-slate-600 tracking-wider">THIS COURSE INCLUDES</p>
-                     <div className="space-y-3 text-sm">
-                        <p className="flex items-center gap-3 text-slate-700">
-                           <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                           {course.duration} of video
-                        </p>
-                        <p className="flex items-center gap-3 text-slate-700">
-                           <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                           Lifetime access
-                        </p>
-                        <p className="flex items-center gap-3 text-slate-700">
-                           <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                           Certificate of completion
-                        </p>
-                        <p className="flex items-center gap-3 text-slate-700">
-                           <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                           24/7 Q&A support
-                        </p>
+                  {course.thisCourseIncludes &&
+                     <div className="pt-6 border-t border-slate-200 space-y-4 mt-6">
+                        <p className="text-xs font-bold text-slate-600 tracking-wider">THIS COURSE INCLUDES</p>
+                        <div className="space-y-3 text-sm">
+                           {course.thisCourseIncludes.map((item: { id: string; title: string }) => (
+                              <p key={item.id} className="flex items-center gap-3 text-slate-700">
+                                 <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                                 {item.title}
+                              </p>
+                           ))}
+                        </div>
                      </div>
-                  </div>
+                  }
                </div>
             </div>
          </div>

@@ -2,11 +2,12 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { DashboardNav } from "@/components/shared/nav/dashboardNav";
-import { handleSignOut } from "@/actions/auth-actions";
 import { LogOut } from "lucide-react";
+import { auth } from "@/auth";
+import { signOut } from "next-auth/react"
+import { LogoutButton } from "@/components/auth/logoutButton";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
    const session = await auth();
@@ -35,12 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
                         <DashboardNav />
 
-                        <form action={handleSignOut} className="w-full">
-                           <button className="flex w-full items-center px-2 py-1.5 hover:cursor-pointer">
-                              <LogOut color="red" className="mr-2 size-4" />
-                              Log out
-                           </button>
-                        </form>
+                        <LogoutButton />
 
                         {/* <Button
                            variant='destructive'
