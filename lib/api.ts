@@ -103,7 +103,7 @@ export const getCoursesData = async (slug?: string): Promise<CourseType[]> => {
    }
 };
 
-export const userLogin = async (email: string, password: string): Promise<{ status: boolean; message: string; user?: { firstName: string, lastName: string, dob: string, state: string, email: string, password: string } }> => {
+export const userLogin = async (email: string, password: string): Promise<{ status: boolean; message: string; user?: { id: number, firstName: string, lastName: string, dob: string, state: string, email: string, password: string } }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/login`);
       const response = await fetch(url, {
@@ -147,6 +147,40 @@ export const userRegister = async (firstName: string, lastName: string, dob: str
             "mobile": mobile,
             "email": email,
             "password": password
+         }),
+      });
+
+      const res = await response.json();
+      if (response.status === 201) {
+         return { status: true, message: res.message };
+      } else {
+         return { status: false, message: res.errors[0].data.errors[0].message };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to register user' };
+   }
+};
+
+export const createOrder = async (userId: number, batchId: number, amount: number): Promise<{ status: boolean; message: string }> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/orders`);
+      const response = await fetch(url, {
+         method: 'POST',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `users API-Key ${process.env.PAYLOAD_ADMIN_API_KEY}`,
+         },
+         body: JSON.stringify({
+            "user": {
+               "id": userId
+            },
+            "batch": {
+               "id": batchId
+            },
+            "amount": amount,
+            "status": "pending"
          }),
       });
 

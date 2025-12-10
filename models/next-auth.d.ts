@@ -4,6 +4,7 @@ import { CommonType } from "./commonType";
 
 declare module "next-auth" {
    interface User extends CommonType {
+      id: number,
       firstName: string,
       lastName: string,
       dob: string,
@@ -17,6 +18,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
    interface JWT extends CommonType {
+      id: number,
       firstName: string,
       lastName: string,
       dob: string,

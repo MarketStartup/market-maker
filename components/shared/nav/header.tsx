@@ -18,8 +18,6 @@ export default function Header({ commonProps, headerProps }: { commonProps: any,
 
    const isActive = (path: string) => pathname === path;
 
-   console.log("HEADER SESSION", { session, sessionStatus });
-
    return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
          <div className="container flex h-16 items-center justify-between">
