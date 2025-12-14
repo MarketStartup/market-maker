@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lock } from "lucide-react";
+import { Lock, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
@@ -38,7 +38,10 @@ export default function Dashboard() {
             <Card>
                <CardHeader className="flex flex-row items-center justify-between">
                   <div>
-                     <CardTitle>Personal Information</CardTitle>
+                     <CardTitle className="flex items-center gap-2 text-primary mb-1">
+                        <User className="w-4 h-4" />
+                        Personal Information
+                     </CardTitle>
                      <CardDescription>Update your profile details</CardDescription>
                   </div>
                   <Button variant={isEditing ? 'default' : 'outline'} onClick={() => setIsEditing(!isEditing)}>
@@ -48,7 +51,18 @@ export default function Dashboard() {
                <CardContent className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                      <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">Full Name</label>
+                        <label className="text-sm font-medium text-foreground mb-2 block">First name</label>
+                        <input
+                           type="text"
+                           name="name"
+                           value={formData.name}
+                           onChange={handleChange}
+                           disabled={!isEditing}
+                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
+                        />
+                     </div>
+                     <div>
+                        <label className="text-sm font-medium text-foreground mb-2 block">Last name</label>
                         <input
                            type="text"
                            name="name"
@@ -114,8 +128,8 @@ export default function Dashboard() {
             {/* Password Section */}
             <Card>
                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                     <Lock className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-primary mb-1">
+                     <Lock className="w-4 h-4" />
                      Security
                   </CardTitle>
                   <CardDescription>Update your password and security settings</CardDescription>

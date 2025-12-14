@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
 import { DashboardNav } from "@/components/shared/nav/dashboardNav";
-import { LogOut } from "lucide-react";
 import { auth } from "@/auth";
-import { signOut } from "next-auth/react"
 import { LogoutButton } from "@/components/auth/logoutButton";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,9 +26,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                               <AvatarFallback>U</AvatarFallback>
                            </Avatar>
                            <p className="font-bold">{session.user?.firstName}</p>
-                           <p className="text-md text-muted-foreground">
+                           {/* <p className="text-md text-muted-foreground">
                               {session.user?.email}
-                           </p>
+                           </p> */}
                         </div>
 
                         <DashboardNav />

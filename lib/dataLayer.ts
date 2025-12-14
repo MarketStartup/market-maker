@@ -1,5 +1,5 @@
 import { CourseType } from "@/models/courseType";
-import { getHomePageData, getCoursesData, getPageData } from "./api";
+import { getHomePageData, getCourseData, getPageData } from "./api";
 import { LayoutConstant } from "./constants";
 
 export async function getPageBlocks(slug?: string, subSlug?: string):
@@ -29,7 +29,7 @@ export async function getPageBlocks(slug?: string, subSlug?: string):
    }
 
    if (subSlug) {
-      const course = await getCoursesData(subSlug);
+      const course = await getCourseData(subSlug);
       if (course.length > 0) {
          const pageData = await getPageData('', LayoutConstant.COURSE_DETAIL);
          if (pageData)

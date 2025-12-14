@@ -29,6 +29,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
 import type { CourseBatchType, CourseType } from "@/models/courseType"
 import { useSession } from "next-auth/react"
+import { TransactionStatusConstant } from "@/lib/constants"
+import { updateOrderAction } from "@/actions/order-actions"
 
 function loadRazorpayScript(): Promise<boolean> {
    return new Promise((resolve) => {
@@ -91,7 +93,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
             return
          }
 
-         const { order, key } = await orderRes.json()
+         const { order, key, orderId } = await orderRes.json()
 
          // 3) Open Razorpay checkout
          const options: any = {
@@ -110,6 +112,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                color: "#0073D8",
             },
             handler: async function (response: any) {
+
                // 4) Verify payment on backend
                const verifyRes = await fetch("/api/payments/razorpay/verify", {
                   method: "POST",
@@ -119,6 +122,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                      razorpay_order_id: response.razorpay_order_id,
                      razorpay_signature: response.razorpay_signature,
                      batchId: SelectedBatchData.id,
+                     orderId: orderId
                   }),
                })
 
@@ -130,7 +134,8 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                }
             },
             modal: {
-               ondismiss: () => {
+               ondismiss: async () => {
+                  const createOrderInCms = await updateOrderAction(orderId, TransactionStatusConstant.CANCELLED)
                   // Optional: track abandoned payments
                },
             },

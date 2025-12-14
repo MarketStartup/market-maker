@@ -1,5 +1,6 @@
 import { CourseType } from "@/models/courseType";
-import { CacheConstant } from "./constants";
+import { CacheConstant, TransactionStatusConstant } from "./constants";
+import { OrderType } from "@/models/OrderType";
 
 export const getCommonData = async () => {
    try {
@@ -86,14 +87,17 @@ export const getPageData = async (slug: string, layout?: string) => {
    }
 };
 
-export const getCoursesData = async (slug?: string): Promise<CourseType[]> => {
+export const getCourseData = async (slug?: string): Promise<CourseType[]> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/courses${slug ? `?where[slug][equals]=${slug}` : ''}`);
       const response = await fetch(url, {
+         headers: {
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
+         },
          next: {
             revalidate: Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DURATION || "0"),
             tags: [CacheConstant.revalidateTag]
-         }
+         },
       });
       const res = await response.json();
       return res?.docs;
@@ -162,7 +166,25 @@ export const userRegister = async (firstName: string, lastName: string, dob: str
    }
 };
 
-export const createOrder = async (userId: number, batchId: number, amount: number): Promise<{ status: boolean; message: string }> => {
+export const getOrderData = async (userId: number): Promise<OrderType[]> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/orders?where[user][equals]=${userId}&sort=-createdAt`);
+      const response = await fetch(url, {
+         cache: 'no-store',
+         headers: {
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
+         }
+      });
+      const res = await response.json();
+      console.log({ res })
+      return res?.docs;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
+export const createOrder = async (userId: number, batchId: number, transactionId: string, amount: number): Promise<{ status: boolean; message: string, orderId: number }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/orders`);
       const response = await fetch(url, {
@@ -170,7 +192,7 @@ export const createOrder = async (userId: number, batchId: number, amount: numbe
          cache: 'no-store',
          headers: {
             'Content-Type': 'application/json',
-            'Authorization': `users API-Key ${process.env.PAYLOAD_ADMIN_API_KEY}`,
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
          },
          body: JSON.stringify({
             "user": {
@@ -179,8 +201,38 @@ export const createOrder = async (userId: number, batchId: number, amount: numbe
             "batch": {
                "id": batchId
             },
+            "transactionId": transactionId,
             "amount": amount,
-            "status": "pending"
+            "status": TransactionStatusConstant.PENDING
+         }),
+      });
+
+      const res = await response.json();
+      if (response.status === 201) {
+         return { status: true, message: res.message, orderId: res.doc.id };
+      } else {
+         return { status: false, message: res.errors[0].data.errors[0].message, orderId: 0 };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to register user', orderId: 0 };
+   }
+};
+
+export const updateOrder = async (orderId: number, status: string, razorpayPaymentId?: string, razorpayOrderId?: string): Promise<{ status: boolean; message: string }> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/orders/${orderId}`);
+      const response = await fetch(url, {
+         method: 'PATCH',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
+         },
+         body: JSON.stringify({
+            "status": status,
+            "razorpayPaymentId": razorpayPaymentId,
+            "razorpayOrderId": razorpayOrderId
          }),
       });
 

@@ -13,7 +13,7 @@ export default function MissionVision({ props }: { props: any }) {
                      </div>
                      <h3 className="text-2xl font-bold text-foreground">Our Mission</h3>
                   </div>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
+                  <p className="text-lg text-muted-foreground leading-relaxed text-justify">
                      {props.mission}
                   </p>
                </div>
@@ -25,7 +25,7 @@ export default function MissionVision({ props }: { props: any }) {
                      </div>
                      <h3 className="text-2xl font-bold text-foreground">Our Vision</h3>
                   </div>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
+                  <p className="text-lg text-muted-foreground leading-relaxed text-justify">
                      {props.vision}
                   </p>
                </div>

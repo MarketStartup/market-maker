@@ -16,6 +16,7 @@ import { useForm, Controller } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { signIn } from "next-auth/react"
+import { PasswordInput } from "../ui/password-input"
 
 type FormData = {
    email: string
@@ -31,6 +32,7 @@ export function LoginForm({
 
    const {
       control,
+      register,
       handleSubmit,
       formState: { errors },
    } = useForm<FormData>({
@@ -107,18 +109,19 @@ export function LoginForm({
                               Forgot your password?
                            </a>
                         </div>
-                        <Controller
-                           name="password"
-                           control={control}
-                           rules={{
+                        <PasswordInput
+                           id="password"
+                           {...register("password", {
                               required: "Password is required",
-                              minLength: { value: 6, message: "Password must be at least 6 characters" },
-                           }}
-                           render={({ field }) => (
-                              <Input id="password" type="password" {...field} />
-                           )}
+                              minLength: {
+                                 value: 6,
+                                 message: "Password must be at least 6 characters",
+                              },
+                           })}
                         />
-                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                        {errors.password && (
+                           <p className="text-red-500 text-sm">{errors.password.message}</p>
+                        )}
                      </Field>
 
                      <Field>

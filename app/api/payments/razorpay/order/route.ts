@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import Razorpay from "razorpay"
 import { auth } from "@/auth"
 import { createOrder } from "@/lib/api"
+import { generateOrderNumber } from "@/lib/utils"
 // import { getBatchById } from "@/lib/api" // if you want to fetch price from backend
 
 const razorpay = new Razorpay({
@@ -22,11 +23,8 @@ export async function POST(req: Request) {
          amount: number // in rupees, e.g. 4999
       }
 
-      // Ideally: fetch batch by id and take price from DB instead of trusting client
-      // const batch = await getBatchById(batchId)
-      // const amountInPaise = batch.price * 100
-
-      const createOrderInCms = await createOrder(session.user.id, parseInt(batchId), amount)
+      const transactionId = generateOrderNumber();
+      const createOrderInCms = await createOrder(session.user.id, parseInt(batchId), transactionId, amount)
       if (!createOrderInCms.status) {
          return NextResponse.json({ message: "Error in creating error" }, { status: 401 })
       }
@@ -47,6 +45,7 @@ export async function POST(req: Request) {
          {
             order,
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            orderId: createOrderInCms.orderId
          },
          { status: 200 },
       )

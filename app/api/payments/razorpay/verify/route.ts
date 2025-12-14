@@ -1,21 +1,24 @@
 import { NextResponse } from "next/server"
 import crypto from "crypto"
 import { auth } from "@/auth"
+import { updateOrder } from "@/lib/api"
+import { TransactionStatusConstant } from "@/lib/constants"
 
 export async function POST(req: Request) {
+  const session = await auth()
+  if (!session?.user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+  }
+
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    batchId,
+    orderId,
+  } = await req.json()
+
   try {
-    const session = await auth()
-    if (!session?.user) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
-    }
-
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      batchId,
-    } = await req.json()
-
     const body = razorpay_order_id + "|" + razorpay_payment_id
 
     const expectedSignature = crypto
@@ -32,8 +35,9 @@ export async function POST(req: Request) {
       )
     }
 
-    // TODO: mark enrollment as paid in DB here
-    // await enrollUserInBatch({ userId: session.user.id, batchId, razorpay_order_id, razorpay_payment_id })
+    const createOrderInCms = await updateOrder(orderId, TransactionStatusConstant.SUCCESS, razorpay_payment_id, razorpay_order_id)
+    // TODO: add batch for user
+    // TODO: handle order update failure 
 
     return NextResponse.json(
       { message: "Payment verified and enrollment created" },
@@ -41,6 +45,8 @@ export async function POST(req: Request) {
     )
   } catch (error) {
     console.error("Razorpay verify error:", error)
+    const createOrderInCms = await updateOrder(orderId, TransactionStatusConstant.FAILED, razorpay_payment_id, razorpay_order_id)
+
     return NextResponse.json(
       { message: "Failed to verify payment" },
       { status: 500 },

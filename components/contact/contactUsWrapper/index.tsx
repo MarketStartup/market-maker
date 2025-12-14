@@ -38,7 +38,7 @@ export default async function ContactFormWrapper() {
                                  <h3 className="font-semibold mb-1">Email</h3>
                                  {commonData.emails.map((item: { id: string; email: string }) => (
                                     <p key={item.id} className="text-sm text-muted-foreground">
-                                       support@learnhub.com
+                                       {item.email}
                                     </p>
                                  ))}
                               </div>
@@ -54,7 +54,7 @@ export default async function ContactFormWrapper() {
                                  <h3 className="font-semibold mb-1">Phone</h3>
                                  {commonData.mobiles.map((item: { id: string; mobile: string }) => (
                                     <p key={item.id} className="text-sm text-muted-foreground">
-                                       +1 (555) 123-4567
+                                       {item.mobile}
                                     </p>
                                  ))}
                               </div>

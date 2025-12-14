@@ -4,10 +4,10 @@ import { Badge } from '@/components/ui/badge'
 import { Star, Users, Clock } from 'lucide-react'
 import courseImage from '@/public/assets/course_sample.jpeg';
 import Image from 'next/image'
-import { getCoursesData } from '@/lib/api';
+import { getCourseData } from '@/lib/api';
 
 export default async function CourseListing({ slug }: { slug: string }) {
-   const coursesData = await getCoursesData();
+   const coursesData = await getCourseData();
 
    return (
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-6 py-16">

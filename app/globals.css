@@ -212,3 +212,13 @@ h6 {
 .password-input::-webkit-textfield-decoration-container {
   display: none;
 }
+
+.payload-richtext a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.payload-richtext a:hover {
+  opacity: 0.9;
+}
