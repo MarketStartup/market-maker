@@ -1,5 +1,5 @@
 export interface CourseType {
-   id: string
+   id: number
    title: string
    slug: string
    description: string
@@ -62,4 +62,10 @@ export interface CourseBatchType {
    name: string;
    startDate: string;
    endDate: string;
+   users: {
+      id: string;
+      user: number;
+      enrollmentDate: string;
+      amountPaid: string;
+   }[];
 }

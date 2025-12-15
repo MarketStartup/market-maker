@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import crypto from "crypto"
 import { auth } from "@/auth"
-import { updateOrder } from "@/lib/api"
+import { updateOrder, enrollUserInBatch } from "@/lib/api"
 import { TransactionStatusConstant } from "@/lib/constants"
 
 export async function POST(req: Request) {
@@ -14,8 +14,9 @@ export async function POST(req: Request) {
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
-    batchId,
+    batch,
     orderId,
+    amount
   } = await req.json()
 
   try {
@@ -36,7 +37,16 @@ export async function POST(req: Request) {
     }
 
     const createOrderInCms = await updateOrder(orderId, TransactionStatusConstant.SUCCESS, razorpay_payment_id, razorpay_order_id)
-    // TODO: add batch for user
+    if (!createOrderInCms.status) {
+      const createOrderInCms = await updateOrder(
+        orderId,
+        TransactionStatusConstant.FAILED,
+        razorpay_payment_id,
+        razorpay_order_id,
+        `Razorpay verify error: Payment Success but failed to update order in CMS: ${orderId}`
+      );
+    }
+    const enrollUser = await enrollUserInBatch(batch, session.user.id, amount);
     // TODO: handle order update failure 
 
     return NextResponse.json(
@@ -45,7 +55,13 @@ export async function POST(req: Request) {
     )
   } catch (error) {
     console.error("Razorpay verify error:", error)
-    const createOrderInCms = await updateOrder(orderId, TransactionStatusConstant.FAILED, razorpay_payment_id, razorpay_order_id)
+    const createOrderInCms = await updateOrder(
+      orderId,
+      TransactionStatusConstant.FAILED,
+      razorpay_payment_id,
+      razorpay_order_id,
+      `Razorpay verify error: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
 
     return NextResponse.json(
       { message: "Failed to verify payment" },

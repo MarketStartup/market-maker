@@ -121,8 +121,9 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                      razorpay_payment_id: response.razorpay_payment_id,
                      razorpay_order_id: response.razorpay_order_id,
                      razorpay_signature: response.razorpay_signature,
-                     batchId: SelectedBatchData.id,
-                     orderId: orderId
+                     batch: SelectedBatchData,
+                     orderId: orderId,
+                     amount: course.price
                   }),
                })
 

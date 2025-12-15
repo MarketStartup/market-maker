@@ -1,4 +1,4 @@
-import { CourseType } from "@/models/courseType";
+import { CourseBatchType, CourseType } from "@/models/courseType";
 import { CacheConstant, TransactionStatusConstant } from "./constants";
 import { OrderType } from "@/models/OrderType";
 
@@ -176,7 +176,6 @@ export const getOrderData = async (userId: number): Promise<OrderType[]> => {
          }
       });
       const res = await response.json();
-      console.log({ res })
       return res?.docs;
    } catch (error) {
       console.error(error);
@@ -219,7 +218,7 @@ export const createOrder = async (userId: number, batchId: number, transactionId
    }
 };
 
-export const updateOrder = async (orderId: number, status: string, razorpayPaymentId?: string, razorpayOrderId?: string): Promise<{ status: boolean; message: string }> => {
+export const updateOrder = async (orderId: number, status: string, razorpayPaymentId?: string, razorpayOrderId?: string, message?: string): Promise<{ status: boolean; message: string }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/orders/${orderId}`);
       const response = await fetch(url, {
@@ -232,7 +231,42 @@ export const updateOrder = async (orderId: number, status: string, razorpayPayme
          body: JSON.stringify({
             "status": status,
             "razorpayPaymentId": razorpayPaymentId,
-            "razorpayOrderId": razorpayOrderId
+            "razorpayOrderId": razorpayOrderId,
+            "message": message
+         }),
+      });
+
+      const res = await response.json();
+      if (response.status === 200) {
+         return { status: true, message: res.message };
+      } else {
+         return { status: false, message: res.errors[0].data.errors[0].message };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to register user' };
+   }
+};
+
+export const enrollUserInBatch = async (batch: CourseBatchType, userId: number, amount: number): Promise<{ status: boolean; message: string }> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/batches/${batch.id}`);
+      const response = await fetch(url, {
+         method: 'PATCH',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
+         },
+         body: JSON.stringify({
+            "users": [
+               ...batch.users,
+               {
+                  "user": userId,
+                  "enrollmentDate": "2025-12-15T19:30:00.000Z",
+                  "amountPaid": amount
+               }
+            ]
          }),
       });
 
@@ -245,5 +279,22 @@ export const updateOrder = async (orderId: number, status: string, razorpayPayme
    } catch (error) {
       console.error(error);
       return { status: false, message: 'Failed to register user' };
+   }
+};
+
+export const getUserEnrollment = async (userId: number): Promise<{course: number; name: string; startDate: string, endDate: string}[]> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/${userId}`);
+      const response = await fetch(url, {
+         cache: 'no-store',
+         headers: {
+            'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
+         }
+      });
+      const res = await response.json();
+      return res?.enrollments.docs;
+   } catch (error) {
+      console.error(error);
+      throw error;
    }
 };
