@@ -298,3 +298,33 @@ export const getUserEnrollment = async (userId: number): Promise<{course: number
       throw error;
    }
 };
+
+export const createInquiry = async (fullName: string, email: string, subject: string, message: string): Promise<{ status: boolean; message: string }> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/inquiries`);
+      const response = await fetch(url, {
+         method: 'POST',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `users API-Key ${process.env.PAYLOAD_ADMIN_API_KEY}`,
+         },
+         body: JSON.stringify({
+            "fullName": fullName,
+            "email": email,
+            "subject": subject,
+            "message": message,
+         }),
+      });
+
+      const res = await response.json();
+      if (response.status === 201) {
+         return { status: true, message: res.message };
+      } else {
+         return { status: false, message: res.errors[0].data.errors[0].message };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to register user' };
+   }
+};
