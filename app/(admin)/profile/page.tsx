@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Lock, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-export default function Dashboard() {
+export default function Profile() {
    const { data: session } = useSession()
    const [isEditing, setIsEditing] = useState(false)
    const [formData, setFormData] = useState({
@@ -105,17 +105,6 @@ export default function Dashboard() {
                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
                         />
                      </div>
-                  </div>
-                  <div>
-                     <label className="text-sm font-medium text-foreground mb-2 block">Bio</label>
-                     <textarea
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleChange}
-                        disabled={!isEditing}
-                        rows={4}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                     />
                   </div>
                   {isEditing && (
                      <Button onClick={handleSave} className="w-full">

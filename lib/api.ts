@@ -282,7 +282,7 @@ export const enrollUserInBatch = async (batch: CourseBatchType, userId: number, 
    }
 };
 
-export const getUserEnrollment = async (userId: number): Promise<{course: number; name: string; startDate: string, endDate: string}[]> => {
+export const getUserEnrollment = async (userId: number): Promise<{course: number; title: string; name: string; startDate: string, endDate: string}[]> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/${userId}`);
       const response = await fetch(url, {

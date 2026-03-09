@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { CourseType } from '@/models/courseType';
+import { User } from 'next-auth';
 
 const AboutUs = dynamic(() => import('@/components/about/aboutUs'));
 const MissionVision = dynamic(() => import('@/components/about/missionVision'));
@@ -17,14 +18,14 @@ const CourseDetailBanner = dynamic(() => import('@/components/course/courseDetai
 const CourseDetail = dynamic(() => import('@/components/course/courseDetail'));
 const GeneralInformation = dynamic(() => import('@/components/shared/generalInformation'));
 
-export default function BlockRenderer(slug: string, block: any, pageTitle?: string, course?: CourseType) {
+export default function BlockRenderer(slug: string, block: any, user?: User, pageTitle?: string, course?: CourseType) {
    switch (block.blockType) {
       case "homeBanner":
          return <HomeBanner props={block} />;
       case "banner":
          return <Banner props={block} pageTitle={pageTitle} />;
       case "courseDetailBanner":
-         return <CourseDetailBanner slug={slug} course={course} />;
+         return <CourseDetailBanner slug={slug} course={course} user={user} />;
       case "promoBanner":
          return <PromoBanner props={block} />;
       case "feature":

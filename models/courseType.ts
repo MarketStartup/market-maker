@@ -59,6 +59,7 @@ export interface CourseReviewType {
 
 export interface CourseBatchType {
    id: string;
+   title: string;
    name: string;
    startDate: string;
    endDate: string;
@@ -68,4 +69,5 @@ export interface CourseBatchType {
       enrollmentDate: string;
       amountPaid: string;
    }[];
+   _status: 'draft' | 'published';
 }

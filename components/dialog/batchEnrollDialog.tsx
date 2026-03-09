@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Calendar, Clock, Users } from "lucide-react"
+import { Calendar } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
@@ -53,6 +53,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
 
    const [open, setOpen] = useState(false)
    const [selectedBatch, setSelectedBatch] = useState<string | null>(null)
+   const [isLoading, setIsLoading] = useState(false)
    const isDesktop = useMediaQuery("(min-width: 426px)")
 
    const handleEnrollClick = () => {
@@ -60,20 +61,25 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
          router.push("/login")
          return
       }
-      setOpen(true)
+      batches.length > 0 ? setOpen(true) : router.push("/dashboard")
    }
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       if (!selectedBatch) return
 
+      setIsLoading(true)
       const SelectedBatchData = batches.find((b) => b.id === selectedBatch)
-      if (!SelectedBatchData) return
-      console.log({ SelectedBatchData })
+      if (!SelectedBatchData) {
+         setIsLoading(false)
+         return
+      }
       // 1) Ensure Razorpay script is loaded
       const ok = await loadRazorpayScript()
+      setOpen(false)
       if (!ok) {
          toast.error("Razorpay SDK failed to load. Please try again.")
+         setIsLoading(false)
          return
       }
 
@@ -90,6 +96,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
 
          if (!orderRes.ok) {
             toast.error("Failed to start payment. Please try again.")
+            setIsLoading(false)
             return
          }
 
@@ -133,11 +140,12 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                } else {
                   toast.error("Payment verification failed. Please contact support.")
                }
+               setIsLoading(false)
             },
             modal: {
                ondismiss: async () => {
-                  const createOrderInCms = await updateOrderAction(orderId, TransactionStatusConstant.CANCELLED)
-                  // Optional: track abandoned payments
+                  await updateOrderAction(orderId, TransactionStatusConstant.CANCELLED)
+                  setIsLoading(false)
                },
             },
          }
@@ -147,8 +155,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
       } catch (err) {
          console.error("Razorpay error", err)
          toast.error("Something went wrong while processing payment.")
-      } finally {
-         setOpen(false)
+         setIsLoading(false)
       }
    }
 
@@ -162,7 +169,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                "hover:opacity-90 hover:shadow-lg hover:cursor-pointer")}
             onClick={handleEnrollClick}
          >
-            Enroll Now
+            {batches.length > 0 ? 'Enroll Now' : 'No Available Batches'}
          </Button>
       )
 
@@ -172,7 +179,11 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
             {triggerButton}
 
             <Dialog open={open} onOpenChange={setOpen}>
-               <DialogContent className="sm:max-w-[425px]">
+               <DialogContent
+                  className="sm:max-w-[425px]"
+                  onInteractOutside={(e) => e.preventDefault()}
+                  onEscapeKeyDown={(e) => e.preventDefault()}
+               >
                   <DialogHeader>
                      <DialogTitle>Select Batch</DialogTitle>
                      <DialogDescription>
@@ -185,6 +196,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                      batches={batches}
                      selectedBatch={selectedBatch}
                      onSelectBatch={setSelectedBatch}
+                     isLoading={isLoading}
                   />
                </DialogContent>
             </Dialog>
@@ -197,7 +209,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
          {triggerButton}
 
          <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerContent>
+            <DrawerContent onInteractOutside={(e) => e.preventDefault()}>
                <DrawerHeader className="text-left">
                   <DrawerTitle>Select Batch</DrawerTitle>
                   <DrawerDescription>
@@ -211,6 +223,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                   batches={batches}
                   selectedBatch={selectedBatch}
                   onSelectBatch={setSelectedBatch}
+                  isLoading={isLoading}
                />
 
                <DrawerFooter className="pt-2">
@@ -228,6 +241,7 @@ type BatchSelectionFormProps = React.ComponentProps<"form"> & {
    batches: CourseBatchType[]
    selectedBatch: string | null
    onSelectBatch: (id: string) => void
+   isLoading?: boolean
 }
 
 function BatchSelectionForm({
@@ -235,6 +249,7 @@ function BatchSelectionForm({
    batches,
    selectedBatch,
    onSelectBatch,
+   isLoading = false,
    ...formProps
 }: BatchSelectionFormProps) {
    return (
@@ -274,7 +289,15 @@ function BatchSelectionForm({
                         <div className="flex-1">
                            <h3 className="font-semibold text-primary text-lg">
                               {batch.name}
-                              <span className="text-sm text-foreground"> (3 weeks)</span>
+                              {(() => {
+                                 const days = (Math.ceil((new Date(batch.endDate).getTime() - new Date(batch.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1)
+                                 const weeks = Math.ceil(days / 7)
+                                 return (
+                                    <span className="text-xs text-muted-foreground ml-1">
+                                       ({weeks > 1 ? `${weeks} weeks` : `${days} days`})
+                                    </span>
+                                 )
+                              })()}
                            </h3>
                         </div>
                      </div>
@@ -292,8 +315,8 @@ function BatchSelectionForm({
             })}
          </RadioGroup>
 
-         <Button type="submit" disabled={!selectedBatch}>
-            Continue to payment
+         <Button type="submit" disabled={!selectedBatch || isLoading} >
+            {isLoading ? "Processing..." : "Continue to payment"}
          </Button>
       </form>
    )

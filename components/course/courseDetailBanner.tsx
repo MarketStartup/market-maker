@@ -5,8 +5,9 @@ import { BreadcrumbType } from '@/models/breadcrumbType';
 import { Badge } from '@/components/ui/badge';
 import { BatchEnrollDialog } from '../dialog/batchEnrollDialog';
 import { format } from 'date-fns'
+import { User } from 'next-auth';
 
-export default function CourseDetailBanner({ slug, course }: { slug: string, course?: CourseType }) {
+export default function CourseDetailBanner({ slug, course, user }: { slug: string, course?: CourseType, user?: User }) {
    if (!course)
       return null;
 
@@ -17,11 +18,11 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
    ]
 
    const heroStyle = {
-      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.9)), url('/assets/course_sample.jpeg')`,
+      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('/assets/course_sample.jpeg')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
-   }
+   };
 
    return (
       <div className="text-white py-12 mb-12" style={heroStyle}>
@@ -84,7 +85,7 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                   <div className="mb-6">
                      <p className="text-xs font-bold text-slate-600 tracking-widest mb-2">COURSE PRICE</p>
                      <div className="flex items-baseline gap-2">
-                        <p className="text-4xl font-bold text-slate-900">₹{course.price.toFixed(2)}</p>
+                        <p className="text-4xl font-bold text-slate-900">₹{parseFloat(course.price.toFixed(2)).toLocaleString('en-IN')}</p>
                      </div>
                   </div>
 
@@ -104,7 +105,15 @@ export default function CourseDetailBanner({ slug, course }: { slug: string, cou
                   >
                      Enroll Now
                   </Button> */}
-                  <BatchEnrollDialog course={course} batches={course.batches.docs} />
+                  {user &&
+                     <BatchEnrollDialog
+                        course={course}
+                        batches={course.batches.docs
+                           .filter((batch) => batch._status === 'published' && !batch.users.some((u) => u.user === user.id))
+                           .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                        }
+                     />
+                  }
                   {/* )} */}
 
                   {course.thisCourseIncludes &&

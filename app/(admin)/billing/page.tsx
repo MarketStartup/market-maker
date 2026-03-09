@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { auth } from "@/auth";
 import { getOrderData } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
@@ -45,9 +46,16 @@ export default async function Billing() {
                               >
                                  <div className="font-medium text-foreground">{order.transactionId}</div>
                                  <div className="text-muted-foreground">{formatDate(order.createdAt)}</div>
-                                 <div className="font-semibold text-foreground">{order.amount}</div>
+                                 <div className="font-semibold text-foreground">₹{parseFloat(order.amount.toFixed(2)).toLocaleString('en-IN')}</div>
                                  <div>
-                                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                                    <span className={cn(
+                                       "text-xs px-2 py-1 rounded-full",
+                                       order.status === 'success' && "bg-green-100 text-green-800",
+                                       order.status === 'pending' && "bg-yellow-100 text-yellow-800",
+                                       order.status === 'cancelled' && "bg-red-100 text-red-800",
+                                       order.status === 'failed' && "bg-red-100 text-red-800",
+                                       !['success', 'pending', 'cancelled', 'failed'].includes(order.status) && "bg-gray-100 text-gray-800"
+                                    )}>
                                        {order.status}
                                     </span>
                                  </div>

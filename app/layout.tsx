@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Inter, Lexend } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
 import Header from "@/components/shared/nav/header";
@@ -9,16 +9,16 @@ import { ThemeProvider } from "@/lib/theme-context";
 import { getHeaderData, getFooterData, getCommonData } from "@/lib/api";
 import { auth } from "@/auth"
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-poppins",
+  variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-const lexend = Lexend({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-lexend",
+  variable: "--font-poppins",
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await auth()
 
   return (
-    <html lang="en" className={`${poppins.variable} ${lexend.variable}`}>
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="antialiased">
         <SessionProvider session={session} >
           {/* <ThemeProvider > */}

@@ -51,7 +51,7 @@ export default async function Dashboard() {
          ) : (
             <div className="space-y-12">
                {inProgressCourses.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {inProgressCourses.map((enrollment) => {
                         const course = courses.find(c => c.id === enrollment.course);
                         return (
@@ -71,7 +71,7 @@ export default async function Dashboard() {
 
                               <div className="p-6 pt-0">
                                  <h3 className="font-bold text-lg text-foreground mb-2 line-clamp-2">
-                                    {course?.title}
+                                    {course?.title} - {course?.batches.docs.find(batch => batch.title === enrollment.title)?.name}
                                  </h3>
                                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                                     {course?.description}
@@ -99,7 +99,7 @@ export default async function Dashboard() {
                {completedCourses.length > 0 && (
                   <div>
                      <h2 className="text-2xl font-bold text-foreground mb-6">Completed Courses</h2>
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {completedCourses.map((enrollment) => {
                            const course = courses.find(c => c.id === enrollment.course);
                            return (
@@ -119,7 +119,7 @@ export default async function Dashboard() {
 
                                  <div className="p-6 pt-0">
                                     <h3 className="font-bold text-lg text-foreground mb-2 line-clamp-2">
-                                       {course?.title}
+                                       {course?.title} - {course?.batches.docs.find(batch => batch.title === enrollment.title)?.name}
                                     </h3>
                                     <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                                        {course?.description}
