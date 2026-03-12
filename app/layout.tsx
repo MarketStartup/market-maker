@@ -4,10 +4,8 @@ import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
 import Header from "@/components/shared/nav/header";
 import Footer from "@/components/shared/nav/footer";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/lib/theme-context";
 import { getHeaderData, getFooterData, getCommonData } from "@/lib/api";
-import { auth } from "@/auth"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,24 +33,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     getFooterData(),
   ]);
 
-  const session = await auth()
-
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="antialiased">
-        <SessionProvider session={session} >
-          {/* <ThemeProvider > */}
-          <Header
-            commonProps={commonData}
-            headerProps={headerData}
-          />
-          {children}
-          <Footer
-            commonProps={commonData}
-            footerProps={footerData}
-          />
-          {/* </ThemeProvider> */}
-        </SessionProvider>
+        {/* <ThemeProvider > */}
+        <Header
+          commonProps={commonData}
+          headerProps={headerData}
+        />
+        {children}
+        <Footer
+          commonProps={commonData}
+          footerProps={footerData}
+        />
+        {/* </ThemeProvider> */}
         <Toaster />
       </body>
     </html>

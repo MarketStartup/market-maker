@@ -1,7 +1,8 @@
 import { getPageBlocks } from "@/lib/dataLayer";
 import { LayoutConstant } from "@/lib/constants";
 import { notFound } from "next/navigation";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import BlockRenderer from "@/lib/dataProvider";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL || 'http://localhost:3001'
@@ -49,7 +50,8 @@ export default async function Page({ params }: Props) {
    const slug = slugArray?.[0] ?? '';
    const subSlug = slugArray?.[1] ?? '';
 
-   const session = await auth();
+   const session = await auth.api.getSession({ headers: await headers() });
+   console.log({session})
 
    const { layout, pageTitle, blocks, course } = await getPageBlocks(slug, subSlug);
    if (layout === LayoutConstant.NOT_FOUND)
@@ -58,7 +60,7 @@ export default async function Page({ params }: Props) {
    return (
       blocks.map((block: any, idx: number) =>
          <div key={idx}>
-            {BlockRenderer(slug, block, session?.user, pageTitle, course)}
+            {BlockRenderer(slug, block, pageTitle, course)}
          </div>
       )
    );

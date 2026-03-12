@@ -4,16 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { getOrderData } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
 
 export default async function Billing() {
-   const session = await auth();
+   const session = await auth.api.getSession({ headers: await headers() });
    if (!session)
       redirect('/login');
 
-   const orders = await getOrderData(session.user.id);
+   const orders = await getOrderData((session.user as any).externalId);
 
    return (
       <div className="bg-background">

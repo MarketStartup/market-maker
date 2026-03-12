@@ -3,11 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
 import { DashboardNav } from "@/components/shared/nav/dashboardNav";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { LogoutButton } from "@/components/auth/logoutButton";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-   const session = await auth();
+   const session = await auth.api.getSession({ headers: await headers() });
 
    if (!session)
       redirect('/login');
@@ -25,7 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                               <AvatarImage src="/avatar-placeholder.png" alt="User" />
                               <AvatarFallback>U</AvatarFallback>
                            </Avatar>
-                           <p className="font-bold">{session.user?.firstName}</p>
+                           <p className="font-bold">{(session.user as any)?.firstName}</p>
                            {/* <p className="text-md text-muted-foreground">
                               {session.user?.email}
                            </p> */}

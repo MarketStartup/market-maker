@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { signOut } from "next-auth/react"
+import { signOut } from "@/lib/auth-client"
 import { LogOut } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -23,8 +23,11 @@ export function LogoutButton() {
       toast.success("Logged out successfully!")
 
       await signOut({
-         callbackUrl: "/login",
-         redirect: true,
+         fetchOptions: {
+            onSuccess: () => {
+               window.location.href = "/login";
+            },
+         },
       })
 
       setLoading(false)

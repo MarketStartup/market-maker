@@ -15,7 +15,7 @@ import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { signIn } from "next-auth/react"
+import { signIn } from "@/lib/auth-client"
 import { PasswordInput } from "../ui/password-input"
 
 type FormData = {
@@ -25,8 +25,9 @@ type FormData = {
 
 export function LoginForm({
    className,
+   callbackUrl,
    ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { callbackUrl?: string }) {
    const router = useRouter()
    const [loading, setLoading] = useState(false)
 
@@ -45,17 +46,16 @@ export function LoginForm({
    const onSubmit = async (data: FormData) => {
       setLoading(true);
       try {
-         const res = await signIn("credentials", {
-            redirect: false,        // we control redirect manually
+         const { error } = await signIn.email({
             email: data.email,
             password: data.password,
          });
 
-         if (res?.error) {
+         if (error) {
             toast.error("Invalid email or password");
          } else {
             toast.success("Logged in successfully");
-            router.push('/dashboard')
+            router.push(callbackUrl || '/dashboard');
          }
       } catch (err: any) {
          console.error("login error", err);

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Calendar } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
@@ -28,7 +28,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
 import type { CourseBatchType, CourseType } from "@/models/courseType"
-import { useSession } from "next-auth/react"
+import { useSession } from "@/lib/auth-client"
 import { TransactionStatusConstant } from "@/lib/constants"
 import { updateOrderAction } from "@/actions/order-actions"
 
@@ -48,20 +48,26 @@ function loadRazorpayScript(): Promise<boolean> {
 }
 
 export function BatchEnrollDialog({ course, batches }: { course: CourseType, batches: CourseBatchType[] }) {
-   const { data: session, status: sessionStatus } = useSession()
+   const { data: session, isPending: sessionLoading } = useSession()
    const router = useRouter()
+   const pathname = usePathname()
 
    const [open, setOpen] = useState(false)
    const [selectedBatch, setSelectedBatch] = useState<string | null>(null)
    const [isLoading, setIsLoading] = useState(false)
    const isDesktop = useMediaQuery("(min-width: 426px)")
 
+   const externalId = (session?.user as any)?.externalId
+   const availableBatches = session?.user
+      ? batches.filter((batch) => !batch.users.some((u) => u.user === externalId))
+      : batches
+
    const handleEnrollClick = () => {
       if (!session?.user) {
-         router.push("/login")
+         router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
          return
       }
-      batches.length > 0 ? setOpen(true) : router.push("/dashboard")
+      availableBatches.length > 0 ? setOpen(true) : router.push("/dashboard")
    }
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,7 +117,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
             description: SelectedBatchData.name,
             order_id: order.id,
             prefill: {
-               name: session?.user?.firstName ?? "",
+               name: session?.user?.name ?? "",
                email: session?.user?.email ?? "",
                contact: (session?.user as any)?.mobile ?? "",
             },
@@ -160,7 +166,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
    }
 
    const triggerButton =
-      sessionStatus === "loading" ? (
+      sessionLoading ? (
          <Skeleton className="h-14 w-full" />
       ) : (
          <Button
@@ -169,7 +175,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                "hover:opacity-90 hover:shadow-lg hover:cursor-pointer")}
             onClick={handleEnrollClick}
          >
-            {batches.length > 0 ? 'Enroll Now' : 'No Available Batches'}
+            {!session?.user || availableBatches.length > 0 ? 'Enroll Now' : 'No Available Batches'}
          </Button>
       )
 
@@ -193,7 +199,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
 
                   <BatchSelectionForm
                      onSubmit={handleSubmit}
-                     batches={batches}
+                     batches={availableBatches}
                      selectedBatch={selectedBatch}
                      onSelectBatch={setSelectedBatch}
                      isLoading={isLoading}

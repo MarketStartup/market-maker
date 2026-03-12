@@ -9,10 +9,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { GraduationCap, Menu } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 
 export default function Header({ commonProps, headerProps }: { commonProps: any, headerProps: any }) {
-   const { data: session, status: sessionStatus } = useSession();
+   const { data: session, isPending: sessionLoading } = useSession();
    const pathname = usePathname();
    const [open, setOpen] = useState(false);
 
@@ -53,7 +53,7 @@ export default function Header({ commonProps, headerProps }: { commonProps: any,
                {/* Desktop Auth Buttons */}
                <div className="hidden md:flex items-center space-x-4">
                   {/* <ThemeToggle /> */}
-                  {sessionStatus === 'loading' ? (
+                  {sessionLoading ? (
                      <Skeleton className='h-7 w-[100px]' />
                   ) : (
                      session && session.user ? (

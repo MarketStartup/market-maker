@@ -1,8 +1,9 @@
 'use server';
 
 import { userRegister } from "@/lib/api";
-import { signIn, signOut } from "@/auth";
-import { AuthError } from "next-auth";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { format } from "date-fns"
 
 export async function registerAction(formData: any) {
@@ -16,27 +17,9 @@ export async function registerAction(formData: any) {
    }
 }
 
-// export async function loginAction(email: string, password: string) {
-//    try {
-//       await signIn("credentials", {
-//          redirect: false,
-//          email,
-//          password,
-//       })
-//       return { status: true }
-//    } catch (error) {
-//       console.error("loginAction AuthError:", error)
-
-//       if (error instanceof AuthError) {
-//          if (error.type === "CredentialsSignin") {
-//             return { status: false, message: "Invalid email or password" }
-//          }
-//          return { status: false, message: "Authentication error" }
-//       }
-//       return { status: false, message: "Unexpected error" }
-//    }
-// }
-
 export async function handleSignOut() {
-   await signOut({ redirect: true, redirectTo: '/login' });
+   await auth.api.signOut({
+      headers: await headers(),
+   });
+   redirect('/login');
 }

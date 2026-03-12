@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import crypto from "crypto"
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
 import { updateOrder, enrollUserInBatch } from "@/lib/api"
 import { TransactionStatusConstant } from "@/lib/constants"
 
 export async function POST(req: Request) {
-  const session = await auth()
+  const session = await auth.api.getSession({ headers: req.headers })
   if (!session?.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
   }
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         `Razorpay verify error: Payment Success but failed to update order in CMS: ${orderId}`
       );
     }
-    const enrollUser = await enrollUserInBatch(batch, session.user.id, amount);
+    const enrollUser = await enrollUserInBatch(batch, (session.user as any).externalId, amount);
     // TODO: handle order update failure 
 
     return NextResponse.json(

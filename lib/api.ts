@@ -110,6 +110,7 @@ export const getCourseData = async (slug?: string): Promise<CourseType[]> => {
 export const userLogin = async (email: string, password: string): Promise<{ status: boolean; message: string; user?: { id: number, firstName: string, lastName: string, dob: string, state: string, email: string, password: string } }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/login`);
+      console.log('login url', url)
       const response = await fetch(url, {
          method: 'POST',
          cache: 'no-store',

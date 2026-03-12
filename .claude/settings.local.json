@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(node -e \"const ba = require\\(''./node_modules/better-auth/dist/index.cjs''\\); console.log\\(Object.keys\\(ba\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''middle''\\) || k.toLowerCase\\(\\).includes\\(''hook''\\) || k.toLowerCase\\(\\).includes\\(''auth''\\)\\)\\)\")",
+      "Bash(xargs grep:*)",
+      "Bash(find node_modules/better-auth/dist -name *.d.mts -exec grep -l hooks.*{ {})",
+      "Bash(2)",
+      "Bash(find node_modules/@better-auth/core/dist -name *.d.mts)",
+      "Bash(ls e:/Isa/Projects/Zeeshan/market-maker/*.ts e:/Isa/Projects/Zeeshan/market-maker/*.js)",
+      "Bash(node -e \"const {memoryAdapter} = require\\(''better-auth/adapters/memory''\\); console.log\\(memoryAdapter.toString\\(\\).slice\\(0,200\\)\\)\")"
+    ]
+  }
+}

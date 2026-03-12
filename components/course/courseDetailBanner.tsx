@@ -5,9 +5,7 @@ import { BreadcrumbType } from '@/models/breadcrumbType';
 import { Badge } from '@/components/ui/badge';
 import { BatchEnrollDialog } from '../dialog/batchEnrollDialog';
 import { format } from 'date-fns'
-import { User } from 'next-auth';
-
-export default function CourseDetailBanner({ slug, course, user }: { slug: string, course?: CourseType, user?: User }) {
+export default function CourseDetailBanner({ slug, course }: { slug: string, course?: CourseType }) {
    if (!course)
       return null;
 
@@ -105,15 +103,13 @@ export default function CourseDetailBanner({ slug, course, user }: { slug: strin
                   >
                      Enroll Now
                   </Button> */}
-                  {user &&
-                     <BatchEnrollDialog
-                        course={course}
-                        batches={course.batches.docs
-                           .filter((batch) => batch._status === 'published' && !batch.users.some((u) => u.user === user.id))
-                           .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-                        }
-                     />
-                  }
+                  <BatchEnrollDialog
+                     course={course}
+                     batches={course.batches.docs
+                        .filter((batch) => batch._status === 'published')
+                        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                     }
+                  />
                   {/* )} */}
 
                   {course.thisCourseIncludes &&

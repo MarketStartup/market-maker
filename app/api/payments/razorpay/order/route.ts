@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import Razorpay from "razorpay"
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
 import { createOrder } from "@/lib/api"
 import { generateOrderNumber } from "@/lib/utils"
 // import { getBatchById } from "@/lib/api" // if you want to fetch price from backend
@@ -13,8 +13,9 @@ const razorpay = new Razorpay({
 export async function POST(req: Request) {
    try {
       // Ensure user is logged in
-      const session = await auth()
-      if (!session?.user || !session.user.id) {
+      const session = await auth.api.getSession({ headers: req.headers })
+      const externalId = (session?.user as any)?.externalId
+      if (!session?.user || !externalId) {
          return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
       }
 
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
       }
 
       const transactionId = generateOrderNumber();
-      const createOrderInCms = await createOrder(session.user.id, parseInt(batchId), transactionId, amount)
+      const createOrderInCms = await createOrder(externalId, parseInt(batchId), transactionId, amount)
       if (!createOrderInCms.status) {
          return NextResponse.json({ message: "Error in creating error" }, { status: 401 })
       }

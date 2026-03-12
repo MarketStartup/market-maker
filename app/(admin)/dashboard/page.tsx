@@ -6,15 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight } from "lucide-react";
 import { getCourseData, getUserEnrollment } from "@/lib/api";
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-   const session = await auth()
+   const session = await auth.api.getSession({ headers: await headers() });
    if (!session?.user)
       redirect(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/login`);
 
-   const enrollments = await getUserEnrollment(session.user.id);
+   const enrollments = await getUserEnrollment((session.user as any).externalId);
    const courses = await getCourseData();
 
    const currentDate = new Date();
