@@ -39,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.lastName = user.lastName as string;
             token.dob = user.dob as string;
             token.state = user.state as string;
+            token.mobile = user.mobile as string;
             token.email = user.email as string;
          }
          if (trigger === "update" && session) {
@@ -56,6 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                lastName: token.lastName as string,
                dob: token.dob as string,
                state: token.state as string,
+               mobile: token.mobile as string,
                email: token.email as string,
             },
          };

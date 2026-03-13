@@ -1,31 +1,12 @@
-'use client'
-
-import { useState } from "react";
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lock, User } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { Lock } from "lucide-react";
+import { PersonalInfoForm } from "@/components/profile/personalInfoForm";
 
-export default function Profile() {
-   const { data: session } = useSession()
-   const [isEditing, setIsEditing] = useState(false)
-   const [formData, setFormData] = useState({
-      name: session?.user?.name || '',
-      email: session?.user?.email || '',
-      phone: '+1 (555) 000-0000',
-      bio: 'Software engineer passionate about learning new technologies.',
-      location: 'San Francisco, CA',
-   })
-
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { name, value } = e.target
-      setFormData(prev => ({ ...prev, [name]: value }))
-   }
-
-   const handleSave = () => {
-      // TODO: Save profile data to backend
-      setIsEditing(false)
-   }
+export default async function Profile() {
+   const session = await auth()
+   const user = session?.user
 
    return (
       <div className="bg-background">
@@ -35,86 +16,15 @@ export default function Profile() {
          </div>
 
          <div className="space-y-6">
-            <Card>
-               <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                     <CardTitle className="flex items-center gap-2 text-primary mb-1">
-                        <User className="w-4 h-4" />
-                        Personal Information
-                     </CardTitle>
-                     <CardDescription>Update your profile details</CardDescription>
-                  </div>
-                  <Button variant={isEditing ? 'default' : 'outline'} onClick={() => setIsEditing(!isEditing)}>
-                     {isEditing ? 'Cancel' : 'Edit'}
-                  </Button>
-               </CardHeader>
-               <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                     <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">First name</label>
-                        <input
-                           type="text"
-                           name="name"
-                           value={formData.name}
-                           onChange={handleChange}
-                           disabled={!isEditing}
-                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                        />
-                     </div>
-                     <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">Last name</label>
-                        <input
-                           type="text"
-                           name="name"
-                           value={formData.name}
-                           onChange={handleChange}
-                           disabled={!isEditing}
-                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                        />
-                     </div>
-                     <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
-                        <input
-                           type="email"
-                           name="email"
-                           value={formData.email}
-                           onChange={handleChange}
-                           disabled={!isEditing}
-                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                        />
-                     </div>
-                     <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">Phone</label>
-                        <input
-                           type="tel"
-                           name="phone"
-                           value={formData.phone}
-                           onChange={handleChange}
-                           disabled={!isEditing}
-                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                        />
-                     </div>
-                     <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">Location</label>
-                        <input
-                           type="text"
-                           name="location"
-                           value={formData.location}
-                           onChange={handleChange}
-                           disabled={!isEditing}
-                           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-                        />
-                     </div>
-                  </div>
-                  {isEditing && (
-                     <Button onClick={handleSave} className="w-full">
-                        Save Changes
-                     </Button>
-                  )}
-               </CardContent>
-            </Card>
+            <PersonalInfoForm
+               firstName={user?.firstName || ''}
+               lastName={user?.lastName || ''}
+               dob={user?.dob || ''}
+               state={user?.state || ''}
+               mobile={user?.mobile || ''}
+               email={user?.email || ''}
+            />
 
-            {/* Password Section */}
             <Card>
                <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-primary mb-1">

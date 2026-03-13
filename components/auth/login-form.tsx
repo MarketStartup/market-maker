@@ -25,8 +25,9 @@ type FormData = {
 
 export function LoginForm({
    className,
+   callbackUrl,
    ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { callbackUrl?: string }) {
    const router = useRouter()
    const [loading, setLoading] = useState(false)
 
@@ -55,7 +56,7 @@ export function LoginForm({
             toast.error("Invalid email or password");
          } else {
             toast.success("Logged in successfully");
-            router.push('/dashboard')
+            router.push(callbackUrl || '/dashboard')
          }
       } catch (err: any) {
          console.error("login error", err);

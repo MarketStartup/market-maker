@@ -105,15 +105,15 @@ export default function CourseDetailBanner({ slug, course, user }: { slug: strin
                   >
                      Enroll Now
                   </Button> */}
-                  {user &&
-                     <BatchEnrollDialog
-                        course={course}
-                        batches={course.batches.docs
-                           .filter((batch) => batch._status === 'published' && !batch.users.some((u) => u.user === user.id))
-                           .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-                        }
-                     />
-                  }
+                  <BatchEnrollDialog
+                     course={course}
+                     batches={course.batches.docs
+                        .filter((batch) =>
+                           batch._status === 'published' &&
+                           (!user || !batch.users.some((u) => u.user === user.id)))
+                        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                     }
+                  />
                   {/* )} */}
 
                   {course.thisCourseIncludes &&

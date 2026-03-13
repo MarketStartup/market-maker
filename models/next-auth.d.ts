@@ -9,6 +9,7 @@ declare module "next-auth" {
       lastName: string,
       dob: string,
       state: string,
+      mobile: string,
       email: string,
    }
    interface Session {
@@ -23,6 +24,7 @@ declare module "next-auth/jwt" {
       lastName: string,
       dob: string,
       state: string,
+      mobile: string,
       email: string,
    }
 }

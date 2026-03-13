@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Calendar } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
@@ -50,6 +50,7 @@ function loadRazorpayScript(): Promise<boolean> {
 export function BatchEnrollDialog({ course, batches }: { course: CourseType, batches: CourseBatchType[] }) {
    const { data: session, status: sessionStatus } = useSession()
    const router = useRouter()
+   const pathname = usePathname()
 
    const [open, setOpen] = useState(false)
    const [selectedBatch, setSelectedBatch] = useState<string | null>(null)
@@ -58,7 +59,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
 
    const handleEnrollClick = () => {
       if (!session?.user) {
-         router.push("/login")
+         router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
          return
       }
       batches.length > 0 ? setOpen(true) : router.push("/dashboard")
