@@ -6,7 +6,7 @@ import { Calendar } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
-import { cn, formatDate } from "@/lib/utils"
+import { cn, formatDate, getBatchDuration } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/button"
 import {
@@ -114,7 +114,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
             prefill: {
                name: session?.user?.firstName ?? "",
                email: session?.user?.email ?? "",
-               contact: (session?.user as any)?.mobile ?? "",
+               contact: session?.user?.mobile ?? "",
             },
             theme: {
                color: "#0073D8",
@@ -290,15 +290,9 @@ function BatchSelectionForm({
                         <div className="flex-1">
                            <h3 className="font-semibold text-primary text-lg">
                               {batch.name}
-                              {(() => {
-                                 const days = (Math.ceil((new Date(batch.endDate).getTime() - new Date(batch.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1)
-                                 const weeks = Math.ceil(days / 7)
-                                 return (
-                                    <span className="text-xs text-muted-foreground ml-1">
-                                       ({weeks > 1 ? `${weeks} weeks` : `${days} days`})
-                                    </span>
-                                 )
-                              })()}
+                              <span className="text-xs text-muted-foreground ml-1">
+                                 ({getBatchDuration(batch.startDate, batch.endDate)})
+                              </span>
                            </h3>
                         </div>
                      </div>

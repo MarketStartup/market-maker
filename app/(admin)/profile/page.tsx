@@ -16,14 +16,14 @@ export default async function Profile() {
          </div>
 
          <div className="space-y-6">
-            <PersonalInfoForm
-               firstName={user?.firstName || ''}
-               lastName={user?.lastName || ''}
-               dob={user?.dob || ''}
-               state={user?.state || ''}
-               mobile={user?.mobile || ''}
-               email={user?.email || ''}
-            />
+            <PersonalInfoForm user={{
+               firstName: user?.firstName || '',
+               lastName: user?.lastName || '',
+               dob: user?.dob || '',
+               state: user?.state || '',
+               mobile: user?.mobile || '',
+               email: user?.email || '',
+            }} />
 
             <Card>
                <CardHeader>

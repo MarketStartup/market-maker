@@ -15,6 +15,12 @@ export function formatDate(dateString: string) {
   }).replace(/ /g, "-"); // Converts "12 Jan 2025" → "12-Jan-2025"
 }
 
+export function getBatchDuration(startDate: string, endDate: string): string {
+  const days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
+  const weeks = Math.ceil(days / 7)
+  return weeks > 1 ? `${weeks} weeks` : `${days} days`
+}
+
 export function generateOrderNumber(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
   let random = ""

@@ -263,7 +263,7 @@ export const enrollUserInBatch = async (batch: CourseBatchType, userId: number, 
                ...batch.users,
                {
                   "user": userId,
-                  "enrollmentDate": "2025-12-15T19:30:00.000Z",
+                  "enrollmentDate": new Date().toISOString(),
                   "amountPaid": amount
                }
             ]

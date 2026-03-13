@@ -9,7 +9,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 
-type Props = {
+const inputClass = "w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
+const readonlyClass = "w-full px-3 py-2 border border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
+
+type UserProfile = {
    firstName: string
    lastName: string
    dob: string
@@ -18,10 +21,15 @@ type Props = {
    email: string
 }
 
-export function PersonalInfoForm({ firstName, lastName, dob, state, mobile, email }: Props) {
+export function PersonalInfoForm({ user }: { user: UserProfile }) {
    const [isEditing, setIsEditing] = useState(false)
    const [statePopoverOpen, setStatePopoverOpen] = useState(false)
-   const [formData, setFormData] = useState({ firstName, lastName, dob, state })
+   const [formData, setFormData] = useState({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dob: user.dob,
+      state: user.state,
+   })
 
    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
@@ -32,9 +40,6 @@ export function PersonalInfoForm({ firstName, lastName, dob, state, mobile, emai
       // TODO: Save profile data to backend
       setIsEditing(false)
    }
-
-   const inputClass = "w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-   const readonlyClass = "w-full px-3 py-2 border border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
 
    return (
       <Card>
@@ -139,7 +144,7 @@ export function PersonalInfoForm({ firstName, lastName, dob, state, mobile, emai
                   <label className="text-sm font-medium text-foreground mb-2 block">Mobile Number</label>
                   <input
                      type="tel"
-                     value={mobile}
+                     value={user.mobile}
                      readOnly
                      className={readonlyClass}
                   />
@@ -148,7 +153,7 @@ export function PersonalInfoForm({ firstName, lastName, dob, state, mobile, emai
                   <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
                   <input
                      type="email"
-                     value={email}
+                     value={user.email}
                      readOnly
                      className={readonlyClass}
                   />
