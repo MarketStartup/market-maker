@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner"
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import Header from "@/components/shared/nav/header";
 import Footer from "@/components/shared/nav/footer";
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="antialiased">
+        <NextTopLoader color="#2563eb" showSpinner={false} />
         <SessionProvider session={session} >
           {/* <ThemeProvider > */}
           <Header
