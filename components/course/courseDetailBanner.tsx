@@ -1,4 +1,5 @@
 import { Star, Users, CheckCircle } from 'lucide-react';
+import { BrochureDownloadButton } from './brochureDownloadButton';
 import BreadcrumbWrap from '@/components/shared/breadcrumbWrap';
 import { CourseType } from '@/models/courseType';
 import { BreadcrumbType } from '@/models/breadcrumbType';
@@ -114,6 +115,9 @@ export default function CourseDetailBanner({ slug, course, user }: { slug: strin
                         .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
                      }
                   />
+                  {course.brochure?.url && (
+                     <BrochureDownloadButton url={course.brochure.url} />
+                  )}
                   {/* )} */}
 
                   {course.thisCourseIncludes &&

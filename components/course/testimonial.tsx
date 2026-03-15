@@ -49,7 +49,7 @@ export function TestimonialCarousel({ testimonials }: { testimonials: CourseRevi
                      <div className="relative bg-card border border-border rounded-lg p-4">
                         <div className="mb-4">
                            <div className="flex items-center gap-1 mb-4">
-                              {[...Array(parseInt(testimonial.rating))].map((_, i) => (
+                              {[...Array(Math.min(5, Math.max(0, parseInt(testimonial.rating) || 0)))].map((_, i) => (
                                  <Star
                                     key={i}
                                     className="w-4 h-4 fill-yellow-400 text-yellow-400"

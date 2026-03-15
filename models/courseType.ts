@@ -48,6 +48,9 @@ export interface CourseType {
    batches: {
       docs: CourseBatchType[]
    },
+   brochure?: {
+      url: string
+   }
    updatedAt: string
 }
 export interface CourseReviewType {

@@ -292,10 +292,77 @@ export const getUserEnrollment = async (userId: number): Promise<{course: number
          }
       });
       const res = await response.json();
-      return res?.enrollments.docs;
+      return res?.enrollments?.docs ?? [];
    } catch (error) {
       console.error(error);
       throw error;
+   }
+};
+
+export const updateUserProfile = async (userId: number, data: { firstName: string; lastName: string; dob: string; state: string }): Promise<{ status: boolean; message: string }> => {
+   try {
+      const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/${userId}`);
+      const response = await fetch(url, {
+         method: 'PATCH',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `users API-Key ${process.env.PAYLOAD_ADMIN_API_KEY}`,
+         },
+         body: JSON.stringify(data),
+      });
+
+      const res = await response.json();
+      if (response.status === 200) {
+         return { status: true, message: 'Profile updated successfully' };
+      } else {
+         return { status: false, message: res.errors?.[0]?.message || 'Failed to update profile' };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to update profile' };
+   }
+};
+
+export const changeUserPassword = async (userId: number, email: string, currentPassword: string, newPassword: string): Promise<{ status: boolean; message: string }> => {
+   try {
+      // Step 1: Verify current password via login
+      const loginUrl = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/login`);
+      const loginResponse = await fetch(loginUrl, {
+         method: 'POST',
+         cache: 'no-store',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ email, password: currentPassword }),
+      });
+
+      if (loginResponse.status !== 200) {
+         return { status: false, message: 'Current password is incorrect' };
+      }
+
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
+      // Step 2: Update password using the user's own token
+      const updateUrl = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/${userId}`);
+      const updateResponse = await fetch(updateUrl, {
+         method: 'PATCH',
+         cache: 'no-store',
+         headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${token}`,
+         },
+         body: JSON.stringify({ password: newPassword }),
+      });
+
+      const updateData = await updateResponse.json();
+      if (updateResponse.status === 200) {
+         return { status: true, message: 'Password updated successfully' };
+      } else {
+         return { status: false, message: updateData.errors?.[0]?.message || 'Failed to update password' };
+      }
+   } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Failed to update password' };
    }
 };
 
