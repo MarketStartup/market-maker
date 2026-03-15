@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { auth } from "@/auth";
 import { PersonalInfoForm } from "@/components/profile/personalInfoForm";
 import { ChangePasswordForm } from "@/components/profile/changePasswordForm";

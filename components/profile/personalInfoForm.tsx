@@ -5,15 +5,15 @@ import { useForm, Controller } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
-import { Check, ChevronDown, ChevronsUpDown, User } from "lucide-react"
+import { Check, ChevronDown, ChevronsUpDown, Pencil, User, X } from "lucide-react"
 import { stateData } from "@/lib/data/stateData"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
-const inputClass = "w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground disabled:opacity-50"
-const readonlyClass = "w-full px-3 py-2 border border-border rounded-lg bg-muted text-muted-foreground cursor-not-allowed"
+const inputClass = "w-full px-3 py-2.5 border border-border rounded-lg bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 transition-colors"
+const readonlyClass = "w-full px-3 py-2.5 border border-border rounded-lg bg-muted text-muted-foreground text-sm cursor-not-allowed"
 
 type UserProfile = {
    id: number
@@ -78,45 +78,62 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
 
    return (
       <Card>
-         <CardHeader className="flex flex-row items-center justify-between">
+         <CardHeader className="flex flex-row items-start justify-between pb-4">
             <div>
-               <CardTitle className="flex items-center gap-2 text-primary mb-1">
-                  <User className="w-4 h-4" />
+               <CardTitle className="flex items-center gap-2 text-base mb-1">
+                  <div className="p-1.5 rounded-md bg-primary/10">
+                     <User className="w-4 h-4 text-primary" />
+                  </div>
                   Personal Information
                </CardTitle>
                <CardDescription>Update your profile details</CardDescription>
             </div>
-            <Button
-               variant={isEditing ? 'default' : 'outline'}
-               onClick={() => isEditing ? handleCancel() : setIsEditing(true)}
-            >
-               {isEditing ? 'Cancel' : 'Edit'}
-            </Button>
+            {!isEditing ? (
+               <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center gap-1.5"
+               >
+                  <Pencil className="w-3.5 h-3.5" />
+                  Edit
+               </Button>
+            ) : (
+               <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCancel}
+                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
+               >
+                  <X className="w-3.5 h-3.5" />
+                  Cancel
+               </Button>
+            )}
          </CardHeader>
          <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">First Name</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">First Name</label>
                   <input
                      type="text"
                      disabled={!isEditing}
-                     className={inputClass}
+                     className={isEditing ? inputClass : readonlyClass}
                      {...register('firstName', { required: 'First name is required' })}
                   />
-                  {errors.firstName && <p className="text-destructive text-sm mt-1">{errors.firstName.message}</p>}
+                  {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName.message}</p>}
                </div>
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Last Name</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Last Name</label>
                   <input
                      type="text"
                      disabled={!isEditing}
-                     className={inputClass}
+                     className={isEditing ? inputClass : readonlyClass}
                      {...register('lastName', { required: 'Last name is required' })}
                   />
-                  {errors.lastName && <p className="text-destructive text-sm mt-1">{errors.lastName.message}</p>}
+                  {errors.lastName && <p className="text-destructive text-xs mt-1">{errors.lastName.message}</p>}
                </div>
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Date of Birth</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Date of Birth</label>
                   <Controller
                      name="dob"
                      control={control}
@@ -125,9 +142,9 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
                         isEditing ? (
                            <Popover open={isDobPopoverOpen} onOpenChange={setIsDobPopoverOpen}>
                               <PopoverTrigger asChild>
-                                 <Button variant="outline" className="w-full justify-between font-normal">
+                                 <Button variant="outline" className="w-full justify-between font-normal text-sm h-10">
                                     {field.value ? field.value.toLocaleDateString() : 'Select date'}
-                                    <ChevronDown />
+                                    <ChevronDown className="w-4 h-4 opacity-50" />
                                  </Button>
                               </PopoverTrigger>
                               <PopoverContent className="w-auto overflow-hidden p-0" align="start">
@@ -147,15 +164,15 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
                               type="text"
                               value={field.value ? field.value.toLocaleDateString() : ''}
                               disabled
-                              className={inputClass}
+                              className={readonlyClass}
                            />
                         )
                      )}
                   />
-                  {errors.dob && <p className="text-destructive text-sm mt-1">{errors.dob.message}</p>}
+                  {errors.dob && <p className="text-destructive text-xs mt-1">{errors.dob.message}</p>}
                </div>
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">State</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">State</label>
                   <Controller
                      name="state"
                      control={control}
@@ -168,17 +185,17 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={statePopoverOpen}
-                                    className="w-full justify-between font-normal"
+                                    className="w-full justify-between font-normal text-sm h-10"
                                  >
                                     {field.value
                                        ? stateData.find((s) => s.value === field.value)?.label
                                        : 'Select State...'}
-                                    <ChevronsUpDown className="opacity-50" />
+                                    <ChevronsUpDown className="w-4 h-4 opacity-50" />
                                  </Button>
                               </PopoverTrigger>
                               <PopoverContent className="w-full p-0">
                                  <Command>
-                                    <CommandInput placeholder="Search State..." className="h-9" />
+                                    <CommandInput placeholder="Search state..." className="h-9" />
                                     <CommandList>
                                        <CommandEmpty>No state found.</CommandEmpty>
                                        <CommandGroup>
@@ -192,7 +209,7 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
                                                 }}
                                              >
                                                 {s.label}
-                                                <Check className={cn("ml-auto", field.value === s.value ? "opacity-100" : "opacity-0")} />
+                                                <Check className={cn("ml-auto w-4 h-4", field.value === s.value ? "opacity-100" : "opacity-0")} />
                                              </CommandItem>
                                           ))}
                                        </CommandGroup>
@@ -205,24 +222,26 @@ export function PersonalInfoForm({ user }: { user: UserProfile }) {
                               type="text"
                               value={stateData.find((s) => s.value === field.value)?.label ?? field.value}
                               disabled
-                              className={inputClass}
+                              className={readonlyClass}
                            />
                         )
                      )}
                   />
-                  {errors.state && <p className="text-destructive text-sm mt-1">{errors.state.message}</p>}
+                  {errors.state && <p className="text-destructive text-xs mt-1">{errors.state.message}</p>}
                </div>
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Mobile Number</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Mobile Number</label>
                   <input type="tel" value={user.mobile} readOnly className={readonlyClass} />
+                  <p className="text-xs text-muted-foreground mt-1">Contact support to change your mobile number</p>
                </div>
                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Email</label>
                   <input type="email" value={user.email} readOnly className={readonlyClass} />
+                  <p className="text-xs text-muted-foreground mt-1">Contact support to change your email</p>
                </div>
             </div>
             {isEditing && (
-               <Button onClick={handleSubmit(onSubmit)} className="w-full" disabled={isSubmitting}>
+               <Button onClick={handleSubmit(onSubmit)} className="w-full mt-2" disabled={isSubmitting}>
                   {isSubmitting ? 'Saving...' : 'Save Changes'}
                </Button>
             )}

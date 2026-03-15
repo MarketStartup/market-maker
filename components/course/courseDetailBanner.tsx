@@ -24,6 +24,7 @@ export default function CourseDetailBanner({ slug, course, user }: { slug: strin
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
    };
+   console.log('CourseDetailBanner course:', course.batches.docs);
 
    return (
       <div className="text-white py-12 mb-12" style={heroStyle}>

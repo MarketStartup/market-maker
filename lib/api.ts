@@ -90,14 +90,15 @@ export const getPageData = async (slug: string, layout?: string) => {
 export const getCourseData = async (slug?: string): Promise<CourseType[]> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/courses${slug ? `?where[slug][equals]=${slug}` : ''}`);
+      const cacheDuration = Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DURATION || "0");
       const response = await fetch(url, {
          headers: {
             'Authorization': `users API-Key ${process.env.PAYLOAD_TOKEN}`,
          },
-         next: {
-            revalidate: Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DURATION || "0"),
-            tags: [CacheConstant.revalidateTag]
-         },
+         ...(cacheDuration > 0
+            ? { next: { revalidate: cacheDuration, tags: [CacheConstant.revalidateTag] } }
+            : { cache: 'no-store' }
+         ),
       });
       const res = await response.json();
       return res?.docs;
@@ -292,6 +293,7 @@ export const getUserEnrollment = async (userId: number): Promise<{course: number
          }
       });
       const res = await response.json();
+      console.log('User Enrollment Response:', res);
       return res?.enrollments?.docs ?? [];
    } catch (error) {
       console.error(error);

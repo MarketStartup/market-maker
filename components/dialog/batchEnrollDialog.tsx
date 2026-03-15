@@ -51,6 +51,7 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
    const { data: session, status: sessionStatus } = useSession()
    const router = useRouter()
    const pathname = usePathname()
+   console.log('BatchEnrollDialog batches:', batches)
 
    const [open, setOpen] = useState(false)
    const [selectedBatch, setSelectedBatch] = useState<string | null>(null)
