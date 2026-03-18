@@ -63,6 +63,10 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
          router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
          return
       }
+      if (!session.user.hasChangedInitialPassword) {
+         router.push(`/update-password?callbackUrl=${encodeURIComponent(pathname)}`)
+         return
+      }
       batches.length > 0 ? setOpen(true) : router.push("/dashboard")
    }
 
@@ -132,13 +136,21 @@ export function BatchEnrollDialog({ course, batches }: { course: CourseType, bat
                      razorpay_signature: response.razorpay_signature,
                      batch: SelectedBatchData,
                      orderId: orderId,
-                     amount: course.price
+                     amount: course.price,
+                     courseName: course.title,
                   }),
                })
 
                if (verifyRes.ok) {
-                  toast.success("Payment successful! You are enrolled.")
-                  router.push("/dashboard") // or a dedicated success page
+                  const verifyData = await verifyRes.json()
+                  const params = new URLSearchParams({
+                     course: course.title,
+                     batch: SelectedBatchData.name,
+                     amount: String(course.price),
+                     paymentId: verifyData.paymentId ?? "",
+                     email: session?.user?.email ?? "",
+                  })
+                  router.push(`/payment-confirmation?${params.toString()}`)
                } else {
                   toast.error("Payment verification failed. Please contact support.")
                }

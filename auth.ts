@@ -29,6 +29,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (pathname.startsWith('/login')) {
                return Response.redirect(new URL('/dashboard', nextUrl));
             }
+            if (!auth.user.hasChangedInitialPassword && !pathname.startsWith('/update-password')) {
+               return Response.redirect(new URL('/update-password', nextUrl));
+            }
          }
          return !!auth;
       },
@@ -41,6 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.state = user.state as string;
             token.mobile = user.mobile as string;
             token.email = user.email as string;
+            token.hasChangedInitialPassword = user.hasChangedInitialPassword;
          }
          if (trigger === "update" && session) {
             token = { ...token, ...session };
@@ -59,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                state: token.state as string,
                mobile: token.mobile as string,
                email: token.email as string,
+               hasChangedInitialPassword: token.hasChangedInitialPassword,
             },
          };
       }

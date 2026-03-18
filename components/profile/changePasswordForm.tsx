@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eye, EyeOff, Lock, ShieldCheck } from "lucide-react"
@@ -16,6 +17,7 @@ type Props = {
 type PasswordFields = 'currentPassword' | 'newPassword' | 'confirmPassword'
 
 export function ChangePasswordForm({ userId, email }: Props) {
+   const { update } = useSession()
    const [formData, setFormData] = useState({
       currentPassword: '',
       newPassword: '',
@@ -39,7 +41,8 @@ export function ChangePasswordForm({ userId, email }: Props) {
       setShowPassword(prev => ({ ...prev, [field]: !prev[field] }))
    }
 
-   const handleSubmit = async () => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
       setError('')
 
       if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
@@ -72,6 +75,7 @@ export function ChangePasswordForm({ userId, email }: Props) {
 
          const data = await response.json()
          if (data.status) {
+            await update({ hasChangedInitialPassword: true })
             toast.success(data.message)
             setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
          } else {
@@ -102,6 +106,7 @@ export function ChangePasswordForm({ userId, email }: Props) {
             <CardDescription>Update your password to keep your account secure</CardDescription>
          </CardHeader>
          <CardContent className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
             {fields.map(({ key, label, placeholder }) => (
                <div key={key}>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">{label}</label>
@@ -133,9 +138,10 @@ export function ChangePasswordForm({ userId, email }: Props) {
                </div>
             )}
 
-            <Button className="w-full mt-2" onClick={handleSubmit} disabled={isLoading}>
+            <Button type="submit" className="w-full mt-2" disabled={isLoading}>
                {isLoading ? 'Updating...' : 'Update Password'}
             </Button>
+            </form>
          </CardContent>
       </Card>
    )

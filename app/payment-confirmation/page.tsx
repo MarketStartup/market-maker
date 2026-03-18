@@ -1,17 +1,23 @@
 'use client'
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Download, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-const PaymentConfirmation = () => {
- 
+function PaymentConfirmationContent() {
+  const params = useSearchParams()
+  const course = params.get("course") ?? "—"
+  const batch = params.get("batch") ?? "—"
+  const amount = params.get("amount") ?? "—"
+  const paymentId = params.get("paymentId") ?? "—"
+  const email = params.get("email") ?? "—"
 
   return (
     <div className="min-h-screen">
-
       <div className="container mx-auto px-4 py-12">
         <motion.div
           className="max-w-2xl mx-auto"
@@ -40,30 +46,30 @@ const PaymentConfirmation = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Course</span>
-                    <span className="font-medium text-right max-w-[200px]">Course Title</span>
+                    <span className="font-medium text-right max-w-[280px]">{course}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Instructor</span>
-                    <span>Instructor name</span>
+                    <span className="text-muted-foreground">Batch</span>
+                    <span className="font-medium text-right max-w-[280px]">{batch}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Amount Paid</span>
-                    <span className="font-bold text-primary">₹ 123</span>
+                    <span className="font-bold text-primary">
+                      ₹{Number(amount).toLocaleString('en-IN')}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Transaction ID</span>
-                    <span className="font-mono text-sm">TXN13456</span>
+                    <span className="font-mono text-sm break-all text-right max-w-[280px]">{paymentId}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Date</span>
-                    <span>{new Date().toLocaleDateString()}</span>
+                    <span>{new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                   </div>
-                  {/* {user && ( */}
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Email</span>
-                      <span>john@gmail.com</span>
-                    </div>
-                  {/* )} */}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Email</span>
+                    <span className="text-right max-w-[280px] break-all">{email}</span>
+                  </div>
                 </div>
               </div>
 
@@ -73,24 +79,24 @@ const PaymentConfirmation = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="outline" className="flex-1 gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Receipt
+              <Link href="/dashboard">
+                <Button className="w-full gap-2">
+                  Go to Dashboard
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
-                <Link href="/my-courses" className="flex-1">
-                  <Button className="w-full gap-2">
-                    Start Learning
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
+              </Link>
             </CardContent>
           </Card>
         </motion.div>
       </div>
     </div>
   );
-};
+}
 
-export default PaymentConfirmation;
+export default function PaymentConfirmation() {
+  return (
+    <Suspense>
+      <PaymentConfirmationContent />
+    </Suspense>
+  )
+}

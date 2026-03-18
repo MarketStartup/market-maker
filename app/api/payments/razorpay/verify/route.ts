@@ -3,6 +3,7 @@ import crypto from "crypto"
 import { auth } from "@/auth"
 import { updateOrder, enrollUserInBatch } from "@/lib/api"
 import { TransactionStatusConstant } from "@/lib/constants"
+import { sendEnrollmentEmail } from "@/lib/email"
 
 export async function POST(req: Request) {
   const session = await auth()
@@ -16,7 +17,8 @@ export async function POST(req: Request) {
     razorpay_signature,
     batch,
     orderId,
-    amount
+    amount,
+    courseName,
   } = await req.json()
 
   try {
@@ -47,10 +49,19 @@ export async function POST(req: Request) {
       );
     }
     const enrollUser = await enrollUserInBatch(batch, session.user.id, amount);
-    // TODO: handle order update failure 
+
+    // Send enrollment confirmation email (non-blocking)
+    sendEnrollmentEmail(
+      session.user.email,
+      session.user.firstName,
+      courseName,
+      batch.name,
+      amount,
+      razorpay_payment_id,
+    ).catch((err) => console.error("Failed to send enrollment email:", err))
 
     return NextResponse.json(
-      { message: "Payment verified and enrollment created" },
+      { message: "Payment verified and enrollment created", paymentId: razorpay_payment_id },
       { status: 200 },
     )
   } catch (error) {

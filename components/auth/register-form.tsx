@@ -24,7 +24,6 @@ import {
    PopoverContent,
    PopoverTrigger,
 } from "@/components/ui/popover"
-import { PasswordInput } from "@/components/ui/password-input"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { ChevronDown, ChevronsUpDown, Check } from "lucide-react"
@@ -42,8 +41,6 @@ type FormData = {
    dob: Date | undefined;
    mobile: string;
    email: string;
-   password: string;
-   confirmPassword: string;
 };
 
 export function RegisterForm({
@@ -52,19 +49,17 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
    const router = useRouter();
 
-   const { register, handleSubmit, control, watch, formState: { errors } } = useForm<FormData>();
+   const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>();
    const [loading, setLoading] = useState(false);
    const [isDobPopoverOpen, setIsDobPopoverOpen] = useState(false);
    const [statePopoverOpen, setStatePopoverOpen] = useState(false)
-
-   const password = watch("password");
 
    const onSubmit = async (data: FormData) => {
       setLoading(true);
       try {
          const result = await registerAction(data)
          if (result.status) {
-            toast.success('User registered successfully')
+            toast.success('Account created! Check your email for your login password.')
             router.push('/login');
          } else {
             toast.error(result.message)
@@ -236,37 +231,6 @@ export function RegisterForm({
                            })}
                         />
                         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                     </Field>
-                     <Field className="grid grid-cols-2 gap-4">
-                        <Field className="gap-2">
-                           <FieldLabel htmlFor="password">Password</FieldLabel>
-                           <PasswordInput
-                              id="password"
-                              {...register("password", {
-                                 required: "Password is required",
-                                 minLength: {
-                                    value: 6,
-                                    message: "Password must be at least 6 characters",
-                                 },
-                              })}
-                           />
-                           {errors.password && (
-                              <p className="text-red-500 text-sm">{errors.password.message}</p>
-                           )}
-                        </Field>
-                        <Field className="gap-2">
-                           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-                           <PasswordInput
-                              id="confirm-password"
-                              {...register("confirmPassword", {
-                                 required: "Please confirm your password",
-                                 validate: (value) => value === password || "Passwords do not match",
-                              })}
-                           />
-                           {errors.confirmPassword && (
-                              <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
-                           )}
-                        </Field>
                      </Field>
                      <Field>
                         <Button

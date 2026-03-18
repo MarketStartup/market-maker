@@ -11,6 +11,7 @@ declare module "next-auth" {
       state: string,
       mobile: string,
       email: string,
+      hasChangedInitialPassword: boolean,
    }
    interface Session {
       user: User
@@ -26,5 +27,6 @@ declare module "next-auth/jwt" {
       state: string,
       mobile: string,
       email: string,
+      hasChangedInitialPassword: boolean,
    }
 }

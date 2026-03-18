@@ -8,6 +8,7 @@ export const config = {
    matcher: [
       "/dashboard",
       "/profile",
-      "/billing"
+      "/billing",
+      "/update-password",
    ],
 };

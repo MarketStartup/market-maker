@@ -108,7 +108,7 @@ export const getCourseData = async (slug?: string): Promise<CourseType[]> => {
    }
 };
 
-export const userLogin = async (email: string, password: string): Promise<{ status: boolean; message: string; user?: { id: number, firstName: string, lastName: string, dob: string, state: string, mobile: string, email: string, password: string } }> => {
+export const userLogin = async (email: string, password: string): Promise<{ status: boolean; message: string; user?: { id: number, firstName: string, lastName: string, dob: string, state: string, mobile: string, email: string, password: string, hasChangedInitialPassword: boolean } }> => {
    try {
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users/login`);
       const response = await fetch(url, {
@@ -134,8 +134,16 @@ export const userLogin = async (email: string, password: string): Promise<{ stat
    }
 };
 
-export const userRegister = async (firstName: string, lastName: string, dob: string, state: string, mobile: string, email: string, password: string): Promise<{ status: boolean; message: string }> => {
+function generatePassword(): string {
+   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#$!';
+   const { randomBytes } = require('crypto');
+   const bytes: Buffer = randomBytes(12);
+   return Array.from(bytes as Uint8Array).map((b: number) => chars[b % chars.length]).join('');
+}
+
+export const userRegister = async (firstName: string, lastName: string, dob: string, state: string, mobile: string, email: string): Promise<{ status: boolean; message: string; generatedPassword?: string }> => {
    try {
+      const generatedPassword = generatePassword();
       const url = new URL(`${process.env.PAYLOAD_BASE_URL}/api/users`);
       const response = await fetch(url, {
          method: 'POST',
@@ -151,13 +159,14 @@ export const userRegister = async (firstName: string, lastName: string, dob: str
             "state": state,
             "mobile": mobile,
             "email": email,
-            "password": password
+            "password": generatedPassword,
+            "hasChangedInitialPassword": false,
          }),
       });
 
       const res = await response.json();
       if (response.status === 201) {
-         return { status: true, message: res.message };
+         return { status: true, message: res.message, generatedPassword };
       } else {
          return { status: false, message: res.errors[0].data.errors[0].message };
       }
@@ -353,7 +362,7 @@ export const changeUserPassword = async (userId: number, email: string, currentP
             'Content-Type': 'application/json',
             'Authorization': `JWT ${token}`,
          },
-         body: JSON.stringify({ password: newPassword }),
+         body: JSON.stringify({ password: newPassword, hasChangedInitialPassword: true }),
       });
 
       const updateData = await updateResponse.json();
