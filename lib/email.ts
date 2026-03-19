@@ -43,6 +43,41 @@ export async function sendWelcomeEmail(
   await transporter.sendMail(mailOptions);
 }
 
+export async function sendForgotPasswordEmail(
+  toEmail: string,
+  firstName: string,
+  tempPassword: string
+): Promise<void> {
+  const mailOptions = {
+    from: `"Market Maker" <${process.env.DEFAULT_REPLY_TO_EMAIL}>`,
+    to: toEmail,
+    subject: 'Market Maker – Password Reset',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #f9f9f9;">
+        <div style="background: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+          <h2 style="color: #1a1a1a; margin-top: 0;">Password Reset, ${firstName}</h2>
+          <p style="color: #444; line-height: 1.6;">
+            We received a request to reset your password. Use the temporary password below to log in.
+            You will be prompted to set a new password immediately after.
+          </p>
+          <div style="background: #f0f4ff; border-left: 4px solid #4f46e5; padding: 16px; border-radius: 4px; margin: 24px 0;">
+            <p style="margin: 0; color: #333;"><strong>Email:</strong> ${toEmail}</p>
+            <p style="margin: 8px 0 0; color: #333;"><strong>Temporary Password:</strong> ${tempPassword}</p>
+          </div>
+          <p style="color: #e53e3e; font-size: 14px;">
+            ⚠️ This temporary password expires once you set a new one. If you did not request a reset, please contact support immediately.
+          </p>
+          <p style="color: #666; font-size: 13px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 16px;">
+            If you did not request this, please ignore this email.
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
 export async function sendEnrollmentEmail(
   toEmail: string,
   firstName: string,
