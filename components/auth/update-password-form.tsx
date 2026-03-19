@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -24,6 +24,14 @@ export function UpdatePasswordForm() {
    const { data: session, update } = useSession()
    const router = useRouter()
    const [loading, setLoading] = useState(false)
+   const [waitingForSession, setWaitingForSession] = useState(false)
+
+   // Navigate only after the JWT cookie actually reflects the updated value
+   useEffect(() => {
+      if (waitingForSession && session?.user?.hasChangedInitialPassword === true) {
+         router.push('/dashboard')
+      }
+   }, [session?.user?.hasChangedInitialPassword, waitingForSession, router])
 
    const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>()
    const newPassword = watch("newPassword")
@@ -39,9 +47,9 @@ export function UpdatePasswordForm() {
 
          const result = await res.json()
          if (result.status) {
-            await update({ hasChangedInitialPassword: true })
             toast.success('Password updated successfully!')
-            router.push('/dashboard')
+            setWaitingForSession(true)
+            await update({ hasChangedInitialPassword: true })
          } else {
             toast.error(result.message)
          }
