@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
    Field,
-   FieldDescription,
    FieldGroup,
    FieldLabel,
 } from "@/components/ui/field"
@@ -22,16 +20,18 @@ type FormData = {
 
 export function UpdatePasswordForm() {
    const { data: session, update } = useSession()
-   const router = useRouter()
-   const [loading, setLoading] = useState(false)
+const [loading, setLoading] = useState(false)
    const [waitingForSession, setWaitingForSession] = useState(false)
 
-   // Navigate only after the JWT cookie actually reflects the updated value
+   // Navigate only after the JWT cookie actually reflects the updated value.
+   // Use a hard navigation to bypass Next.js router cache — the middleware
+   // previously cached the /dashboard → /update-password redirect on the client,
+   // so router.push would replay it even with a fresh cookie.
    useEffect(() => {
       if (waitingForSession && session?.user?.hasChangedInitialPassword === true) {
-         router.push('/dashboard')
+         window.location.href = '/dashboard'
       }
-   }, [session?.user?.hasChangedInitialPassword, waitingForSession, router])
+   }, [session?.user?.hasChangedInitialPassword, waitingForSession])
 
    const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>()
    const newPassword = watch("newPassword")
