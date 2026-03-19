@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(pnpm add:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find /e/Isa/Projects/Zeeshan/market-maker/lib -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\) ! -path */node_modules/*)",
+      "Bash(grep -r \"register\" /e/Isa/Projects/Zeeshan/market-maker/app --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/.next/*\")",
+      "Bash(grep -r \"RegisterForm\" /e/Isa/Projects/Zeeshan/market-maker --include=\"*.ts\" --include=\"*.tsx\" ! -path \"*/.next/*\" ! -path \"*/node_modules/*\")",
+      "Bash(xargs basename:*)",
+      "Bash(ls -la /e/Isa/Projects/Zeeshan/market-maker/app/\\\\\\(auth\\\\\\)/)"
     ]
   }
 }
