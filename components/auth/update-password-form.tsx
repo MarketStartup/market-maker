@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -19,19 +20,8 @@ type FormData = {
 }
 
 export function UpdatePasswordForm() {
-   const { data: session, update } = useSession()
-const [loading, setLoading] = useState(false)
-   const [waitingForSession, setWaitingForSession] = useState(false)
-
-   // Navigate only after the JWT cookie actually reflects the updated value.
-   // Use a hard navigation to bypass Next.js router cache — the middleware
-   // previously cached the /dashboard → /update-password redirect on the client,
-   // so router.push would replay it even with a fresh cookie.
-   useEffect(() => {
-      if (waitingForSession && session?.user?.hasChangedInitialPassword === true) {
-         window.location.href = '/dashboard'
-      }
-   }, [session?.user?.hasChangedInitialPassword, waitingForSession])
+   const { data: session } = useSession()
+   const [loading, setLoading] = useState(false)
 
    const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>()
    const newPassword = watch("newPassword")
@@ -42,14 +32,26 @@ const [loading, setLoading] = useState(false)
          const res = await fetch('/api/change-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: session?.user?.id, email: session?.user?.email, newPassword: data.newPassword, hasChangedInitialPassword: false }),
+            body: JSON.stringify({
+               userId: session?.user?.id,
+               email: session?.user?.email,
+               newPassword: data.newPassword,
+               hasChangedInitialPassword: false,
+            }),
          })
 
          const result = await res.json()
          if (result.status) {
             toast.success('Password updated successfully!')
-            setWaitingForSession(true)
-            await update({ hasChangedInitialPassword: true })
+            // Re-sign in to get a completely fresh JWT from the CMS.
+            // The CMS now has hasChangedInitialPassword: true, so the new
+            // JWT will reflect that — no race condition with update().
+            await signIn('credentials', {
+               redirect: false,
+               email: session?.user?.email,
+               password: data.newPassword,
+            })
+            window.location.href = '/dashboard'
          } else {
             toast.error(result.message)
          }
